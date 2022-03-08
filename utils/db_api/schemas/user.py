@@ -11,6 +11,7 @@ class User(TimedBaseModel):
     pic_url = Column(String(255))
     weapon_id = Column(Integer) #Внешний ключ
     clothes_id = Column(Integer) #Внешний ключ
+    max_health = Column(Integer, default=100)
     health = Column(Integer, default=100)
     hunger = Column(Integer, default=100)
     money = Column(BigInteger, default=100)
