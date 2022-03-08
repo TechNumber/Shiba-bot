@@ -16,10 +16,10 @@ async def bot_start(message: types.Message, state: FSMContext):
 @dp.message_handler(state="email")
 async def enter_email(message: types.Message, state: FSMContext):
     email = message.text
-    await commands.update_user_email(email=email, id=message.from_user.id)
-    user = await commands.select_user(id=message.from_user.id)
+    await commands.update_user_email(email=email, user_id=message.from_user.id)
+    user = await commands.select_user(user_id=message.from_user.id)
     await message.answer("Данные обновлены. Запись в БД: \n" +
-                         hcode(f"id={user.id}\n"
+                         hcode(f"id={user.user_id}\n"
                                f"name={user.name}\n"
                                f"email={user.email}"))
     await state.finish()

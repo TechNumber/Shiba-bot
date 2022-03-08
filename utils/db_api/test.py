@@ -24,10 +24,10 @@ async def test():
     count_users = await quick_commands.count_users()
     print(f"Всего пользователей: {count_users}")
 
-    user = await quick_commands.select_user(id=5)
+    user = await quick_commands.select_user(user_id=5)
     print(f"Получил пользователя: {user}")
 
-    await quick_commands.update_user_email(5, "etoighjworetihj@wef.gh")
+    await quick_commands.update_shibu_name(5, "etoighjworetihj@wef.gh")
 
 
 loop = asyncio.get_event_loop()
