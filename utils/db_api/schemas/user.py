@@ -7,7 +7,7 @@ class User(TimedBaseModel):
     __tablename__ = 'users'
     user_id = Column(BigInteger, primary_key=True)
     user_name = Column(String(100))
-    shibu_name = Column(String(100))
+    shiba_name = Column(String(100))
     pic_url = Column(String(255))
     weapon_id = Column(Integer) #Внешний ключ
     clothes_id = Column(Integer) #Внешний ключ

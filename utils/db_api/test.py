@@ -27,7 +27,7 @@ async def test():
     user = await user_commands.select_user(user_id=5)
     print(f"Получил пользователя: {user}")
 
-    await user_commands.update_shibu_name(5, "etoighjworetihj@wef.gh")
+    await user_commands.update_shiba_name(5, "etoighjworetihj@wef.gh")
 
 
 loop = asyncio.get_event_loop()

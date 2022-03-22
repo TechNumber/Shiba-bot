@@ -4,9 +4,9 @@ from utils.db_api.db_gino import db
 from utils.db_api.schemas.user import User
 
 
-async def add_user(user_id: int, user_name: str, shibu_name: str = None, pic_url: str = None):
+async def add_user(user_id: int, user_name: str, shiba_name: str = None, pic_url: str = None):
     try:
-        user = User(user_id=user_id, user_name=user_name, shibu_name=shibu_name, pic_url=pic_url)
+        user = User(user_id=user_id, user_name=user_name, shiba_name=shiba_name, pic_url=pic_url)
         await user.create()
 
     except UniqueViolationError:
@@ -28,6 +28,6 @@ async def count_users():
     return total
 
 
-async def update_shibu_name(user_id, shibu_name):
+async def update_shiba_name(user_id, shiba_name):
     user = await User.get(user_id)
-    await user.update(shibu_name=shibu_name).apply()
+    await user.update(shiba_name=shiba_name).apply()
