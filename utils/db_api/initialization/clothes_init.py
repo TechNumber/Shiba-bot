@@ -16,8 +16,12 @@ async def clothes_init():
     # await db.gino.drop_all()
     # await db.gino.create_all()
     # ----------------------------------------------------------------------------
-    await Clothes.__table__.gino.drop()
-    await Clothes.__table__.gino.create()
+
+    # ------------------------------------
+    # Для версии без внешних ключей
+    # await Clothes.__table__.gino.drop()
+    # await Clothes.__table__.gino.create()
+    # ------------------------------------
     await clothes_commands.add_clothes(
         clothes_id=1,
         clothes_name="Ошейник",

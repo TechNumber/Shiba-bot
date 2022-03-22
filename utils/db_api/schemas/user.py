@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, BigInteger, String, sql
+from sqlalchemy import Column, Integer, BigInteger, String, sql, ForeignKey
+from sqlalchemy.orm import relationship
 
 from utils.db_api.db_gino import TimedBaseModel
 
@@ -9,8 +10,16 @@ class User(TimedBaseModel):
     user_name = Column(String(100))
     shiba_name = Column(String(100))
     pic_url = Column(String(255))
-    weapon_id = Column(Integer) #Внешний ключ
-    clothes_id = Column(Integer) #Внешний ключ
+    weapon_id = Column(
+        Integer,
+        ForeignKey('weapons.weapon_id', ondelete='SET NULL')
+    )
+    weapon = relationship("Weapon")
+    clothes_id = Column(
+        Integer,
+        ForeignKey('clothes.clothes_id', ondelete='SET NULL')
+    )
+    clothes = relationship("Clothes")
     max_health = Column(Integer, default=100)
     health = Column(Integer, default=100)
     hunger = Column(Integer, default=100)

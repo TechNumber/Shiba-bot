@@ -7,6 +7,7 @@ from utils.set_bot_commands import set_default_commands
 from loader import db
 from utils.db_api import db_gino
 from utils.db_api import all_init
+from utils.db_api.schemas.user import User
 
 
 async def on_startup(dispatcher):
@@ -15,11 +16,13 @@ async def on_startup(dispatcher):
     print("Готово")
 
     print("Чистим базу")
-    await db.gino.drop_all()
+    # await db.gino.drop_all()
+    await User.__table__.gino.drop()
     print("Готово")
 
     print("Создаём таблицы")
-    await db.gino.create_all()
+    # await db.gino.create_all()
+    await User.__table__.gino.create()
     print("Готово")
 
     print("Инициализируем таблицы предметов")

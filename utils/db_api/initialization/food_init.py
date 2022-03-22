@@ -16,8 +16,12 @@ async def food_init():
     # await db.gino.drop_all()
     # await db.gino.create_all()
     # ----------------------------------------------------------------------------
-    await Food.__table__.gino.drop()
-    await Food.__table__.gino.create()
+
+    # ------------------------------------
+    # Для версии без внешних ключей
+    # await Food.__table__.gino.drop()
+    # await Food.__table__.gino.create()
+    # ------------------------------------
     await food_commands.add_food(
         food_id=1,
         food_name="Сухой корм",
