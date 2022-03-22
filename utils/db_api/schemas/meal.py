@@ -3,13 +3,13 @@ from sqlalchemy import Column, Integer, Float, String, sql
 from utils.db_api.db_gino import TimedBaseModel
 
 
-class Food(TimedBaseModel):
-    __tablename__ = 'food'
-    food_id = Column(Integer, primary_key=True)
-    food_name = Column(String(100))  # Название
-    food_price = Column(Integer)  # Стоимость
-    food_description = Column(String(255))  # Словесное описание
-    food_chars = Column(String(255))  # Список эффектов
+class Meal(TimedBaseModel):
+    __tablename__ = 'meals'
+    meal_id = Column(Integer, primary_key=True)
+    meal_name = Column(String(100))  # Название
+    meal_price = Column(Integer)  # Стоимость
+    meal_description = Column(String(255))  # Словесное описание
+    meal_chars = Column(String(255))  # Список эффектов
     # эффекты максимального здоровья — избыточный атрибут,
     # занимает три столбца, надо бы чем-то заменить
     max_health_time = Column(Integer)  # Время действия эффекта в минутах. 0, если эффект перманентный

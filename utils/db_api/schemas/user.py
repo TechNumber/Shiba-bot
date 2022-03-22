@@ -15,11 +15,11 @@ class User(TimedBaseModel):
         ForeignKey('weapons.weapon_id', ondelete='SET NULL')
     )
     weapon = relationship("Weapon")
-    clothes_id = Column(
+    outfit_id = Column(
         Integer,
-        ForeignKey('clothes.clothes_id', ondelete='SET NULL')
+        ForeignKey('outfits.outfit_id', ondelete='SET NULL')
     )
-    clothes = relationship("Clothes")
+    outfit = relationship("Outfit")
     max_health = Column(Integer, default=100)
     health = Column(Integer, default=100)
     hunger = Column(Integer, default=100)

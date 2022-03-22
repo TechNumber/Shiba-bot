@@ -1,7 +1,7 @@
-from utils.db_api.initialization import food_init, clothes_init, weapons_init
+from utils.db_api.initialization import meal_init, outfit_init, weapon_init
 
 
 async def all_init():
-    await clothes_init.clothes_init()
-    await food_init.food_init()
-    await weapons_init.weapons_init()
+    await outfit_init.outfit_init()
+    await meal_init.meal_init()
+    await weapon_init.weapon_init()

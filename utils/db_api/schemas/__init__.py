@@ -1,4 +1,4 @@
 from . import user
-from . import food
-from . import clothes
+from . import meal
+from . import outfit
 from . import weapon

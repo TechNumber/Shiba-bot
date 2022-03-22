@@ -5,11 +5,11 @@
 # from utils.db_api.db_gino import db
 # ----------------------------------------------------------------------------
 
-from utils.db_api import food_commands
-from utils.db_api.schemas.food import Food
+from utils.db_api import meal_commands
+from utils.db_api.schemas.meal import Meal
 
 
-async def food_init():
+async def meal_init():
     # ----------------------------------------------------------------------------
     # Для создания исключительно этой таблицы при запуске конкретно из этого файла
     # await db.set_bind(config.POSTGRES_URI)
@@ -19,15 +19,15 @@ async def food_init():
 
     # ------------------------------------
     # Для версии без внешних ключей
-    # await Food.__table__.gino.drop()
-    # await Food.__table__.gino.create()
+    # await Meal.__table__.gino.drop()
+    # await Meal.__table__.gino.create()
     # ------------------------------------
-    await food_commands.add_food(
-        food_id=1,
-        food_name="Сухой корм",
-        food_price=25,
-        food_description="Описание",
-        food_chars="Описание через f строки с выгрузкой эффектов",
+    await meal_commands.add_meal(
+        meal_id=1,
+        meal_name="Сухой корм",
+        meal_price=25,
+        meal_description="Описание",
+        meal_chars="Описание через f строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=0,
         max_health_mpy=1,
@@ -38,12 +38,12 @@ async def food_init():
         strength_add=0,
         strength_mpy=1
     )
-    await food_commands.add_food(
-        food_id=2,
-        food_name="Говяжья кость",
-        food_price=70,
-        food_description="Описание",
-        food_chars="Описание через f строки с выгрузкой эффектов",
+    await meal_commands.add_meal(
+        meal_id=2,
+        meal_name="Говяжья кость",
+        meal_price=70,
+        meal_description="Описание",
+        meal_chars="Описание через f строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=0,
         max_health_mpy=1,
@@ -54,12 +54,12 @@ async def food_init():
         strength_add=0,
         strength_mpy=1.2
     )
-    await food_commands.add_food(
-        food_id=3,
-        food_name="Листик мяты",
-        food_price=250,
-        food_description="Описание",
-        food_chars="Описание через f строки с выгрузкой эффектов",
+    await meal_commands.add_meal(
+        meal_id=3,
+        meal_name="Листик мяты",
+        meal_price=250,
+        meal_description="Описание",
+        meal_chars="Описание через f строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=0,
         max_health_mpy=1,
@@ -70,12 +70,12 @@ async def food_init():
         strength_add=0,
         strength_mpy=1.5
     )
-    await food_commands.add_food(
-        food_id=4,
-        food_name="Утиная грудка",
-        food_price=200,
-        food_description="Описание",
-        food_chars="Описание через f строки с выгрузкой эффектов",
+    await meal_commands.add_meal(
+        meal_id=4,
+        meal_name="Утиная грудка",
+        meal_price=200,
+        meal_description="Описание",
+        meal_chars="Описание через f строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=0,
         max_health_mpy=1,
@@ -86,12 +86,12 @@ async def food_init():
         strength_add=0,
         strength_mpy=1
     )
-    await food_commands.add_food(
-        food_id=5,
-        food_name="Каре ягненка",
-        food_price=200,
-        food_description="Описание",
-        food_chars="Описание через f строки с выгрузкой эффектов",
+    await meal_commands.add_meal(
+        meal_id=5,
+        meal_name="Каре ягненка",
+        meal_price=200,
+        meal_description="Описание",
+        meal_chars="Описание через f строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=0,
         max_health_mpy=1,
@@ -102,12 +102,12 @@ async def food_init():
         strength_add=0,
         strength_mpy=2
     )
-    await food_commands.add_food(
-        food_id=6,
-        food_name="Черная икра",
-        food_price=1000,
-        food_description="Описание",
-        food_chars="Описание через f строки с выгрузкой эффектов",
+    await meal_commands.add_meal(
+        meal_id=6,
+        meal_name="Черная икра",
+        meal_price=1000,
+        meal_description="Описание",
+        meal_chars="Описание через f строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=0,
         max_health_mpy=1,
@@ -118,12 +118,12 @@ async def food_init():
         strength_add=0,
         strength_mpy=3
     )
-    await food_commands.add_food(
-        food_id=7,
-        food_name="Фуа-гра",
-        food_price=10000,
-        food_description="Описание",
-        food_chars="Описание через f строки с выгрузкой эффектов",
+    await meal_commands.add_meal(
+        meal_id=7,
+        meal_name="Фуа-гра",
+        meal_price=10000,
+        meal_description="Описание",
+        meal_chars="Описание через f строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=1000,
         max_health_mpy=1,
@@ -138,5 +138,5 @@ async def food_init():
 # ----------------------------------------------------------------------------
 # Для создания исключительно этой таблицы при запуске конкретно из этого файла
 # loop = asyncio.get_event_loop()
-# loop.run_until_complete(food_init())
+# loop.run_until_complete(meal_init())
 # ----------------------------------------------------------------------------

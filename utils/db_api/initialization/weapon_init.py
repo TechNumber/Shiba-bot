@@ -9,7 +9,7 @@ from utils.db_api import weapon_commands
 from utils.db_api.schemas.weapon import Weapon
 
 
-async def weapons_init():
+async def weapon_init():
     # ----------------------------------------------------------------------------
     # Для создания исключительно этой таблицы при запуске конкретно из этого файла
     # await db.set_bind(config.POSTGRES_URI)
@@ -86,5 +86,5 @@ async def weapons_init():
 # ----------------------------------------------------------------------------
 # Для создания исключительно этой таблицы при запуске конкретно из этого файла
 # loop = asyncio.get_event_loop()
-# loop.run_until_complete(clothes_init())
+# loop.run_until_complete(outfit_init())
 # ----------------------------------------------------------------------------
