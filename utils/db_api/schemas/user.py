@@ -10,6 +10,14 @@ class User(TimedBaseModel):
     user_name = Column(String(100))
     shiba_name = Column(String(100))
     pic_url = Column(String(255))
+    max_health = Column(Integer, default=100)
+    health = Column(Integer, default=100)
+    hunger = Column(Integer, default=100)
+    money = Column(BigInteger, default=100)
+    strength = Column(Integer, default=1)
+    agility = Column(Integer, default=1)
+    level = Column(Integer, default=1)
+    exp = Column(Integer, default=0)
     weapon_id = Column(
         Integer,
         ForeignKey('weapons.weapon_id', ondelete='SET NULL')
@@ -20,13 +28,5 @@ class User(TimedBaseModel):
         ForeignKey('outfits.outfit_id', ondelete='SET NULL')
     )
     outfit = relationship("Outfit")
-    max_health = Column(Integer, default=100)
-    health = Column(Integer, default=100)
-    hunger = Column(Integer, default=100)
-    money = Column(BigInteger, default=100)
-    strength = Column(Integer, default=1)
-    agility = Column(Integer, default=1)
-    level = Column(Integer, default=1)
-    exp = Column(Integer, default=0)
 
     query: sql.Select

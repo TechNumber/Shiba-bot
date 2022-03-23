@@ -3,12 +3,13 @@ import asyncio
 from data import config
 from utils.db_api import user_commands
 from utils.db_api.db_gino import db
+from utils.db_api.schemas.user import User
 
 
 async def test():
     await db.set_bind(config.POSTGRES_URI)
-    await db.gino.drop_all()
-    await db.gino.create_all()
+    await User.__table__.gino.drop()
+    await User.__table__.gino.create()
 
     print("Добавляем пользователей")
     await user_commands.add_user(1, "One", "email")
