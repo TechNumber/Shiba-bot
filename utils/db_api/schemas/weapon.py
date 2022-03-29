@@ -15,3 +15,5 @@ class Weapon(TimedBaseModel):
     agility_mpy = Column(Float)  # Во сколько раз увеличивается ловкость
     health_add = Column(Integer)  # На сколько единиц увеличивается текущее здоровье
     health_mpy = Column(Float)  # Во сколько раз увеличивается текущее здоровье
+
+    query: sql.Select
