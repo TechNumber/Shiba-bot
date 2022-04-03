@@ -39,3 +39,8 @@ async def count_users():
 async def update_shiba_name(user_id, shiba_name):
     user = await User.get(user_id)
     await user.update(shiba_name=shiba_name).apply()
+
+
+async def get_all_users_id():
+    user_id_list = await User.query.gino.load(User.user_id).all()
+    return user_id_list

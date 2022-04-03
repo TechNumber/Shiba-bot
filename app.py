@@ -17,12 +17,12 @@ async def on_startup(dispatcher):
 
     print("Чистим базу")
     # await db.gino.drop_all()
-    await User.__table__.gino.drop()
+    # await User.__table__.gino.drop()
     print("Готово")
 
     print("Создаём таблицы")
     # await db.gino.create_all()
-    await User.__table__.gino.create()
+    # await User.__table__.gino.create()
     print("Готово")
 
     print("Инициализируем таблицы предметов")

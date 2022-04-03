@@ -32,10 +32,11 @@ async def test():
     print(f"Получил пользователя: {user}")
 
     await user_commands.update_shiba_name(5, "etoighjworetihj@wef.gh")
-
-    await inventory_weapon_commands.add_inventory_weapon(12435134, 1)
-    await inventory_weapon_commands.discard_inventory_weapon(12435134, 1)
-    print()
+    id_list = await user_commands.get_all_users_id()
+    print(id_list)
+    # await inventory_weapon_commands.add_inventory_weapon(12435134, 1)
+    # await inventory_weapon_commands.discard_inventory_weapon(12435134, 1)
+    # print()
 
 
 loop = asyncio.get_event_loop()
