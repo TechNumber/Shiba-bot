@@ -1,4 +1,5 @@
 from aiogram import executor
+from asyncpg import UndefinedTableError
 
 from loader import dp
 import middlewares, filters, handlers
@@ -8,6 +9,8 @@ from loader import db
 from utils.db_api import db_gino
 from utils.db_api import all_init
 from utils.db_api.schemas.user import User
+from utils.db_api.schemas.duel import Duel
+from utils.db_api.schemas.inventory_weapon import InventoryWeapon
 
 
 async def on_startup(dispatcher):
@@ -17,17 +20,32 @@ async def on_startup(dispatcher):
 
     print("Чистим базу")
     # await db.gino.drop_all()
-    # await User.__table__.gino.drop()
-    print("Готово")
-
-    print("Создаём таблицы")
-    # await db.gino.create_all()
-    # await User.__table__.gino.create()
+    try:
+        await Duel.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    try:
+        await InventoryWeapon.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    try:
+        await User.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
     print("Готово")
 
     print("Инициализируем таблицы предметов")
     await all_init.all_init()
     print("Готово")
+
+
+    print("Создаём таблицы")
+    # await db.gino.create_all()
+    await User.__table__.gino.create()
+    await Duel.__table__.gino.create()
+    await InventoryWeapon.__table__.gino.create()
+    print("Готово")
+
 
     # Устанавливаем дефолтные команды
     await set_default_commands(dispatcher)

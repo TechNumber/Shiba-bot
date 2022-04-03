@@ -7,6 +7,7 @@ async def add_inventory_weapon(user_id: int,
                                weapon_id: int):
     try:
         inventory_weapon = InventoryWeapon(
+            entry_id=hash(str(user_id) + str(weapon_id)),
             user_id=user_id,
             amount=1,
             weapon_id=weapon_id
@@ -27,13 +28,10 @@ async def discard_inventory_weapon(user_id: int,
         InventoryWeapon.user_id == user_id and
         InventoryWeapon.weapon_id == weapon_id
     ).gino.first()
-    # await (db.select([db.func.count()])
-    #        .where(and_(Meeting.status == MeetingStatus.SCHEDULED,
-    #                    Meeting.start_at < some_time_from_now(window))))
-    # .gino
-    # .scalar())
-    # )
-    if inventory_weapon is None:
-        print("Запись не найдена")
+    if inventory_weapon is not None:
+        if inventory_weapon.amount > 1:
+            await inventory_weapon.update(amount=inventory_weapon.amount - 1).apply()
+        else:
+            await inventory_weapon.delete()
     else:
-        print("Запись найдена")
+        print("Запись не найдена")

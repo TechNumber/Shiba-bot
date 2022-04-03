@@ -7,13 +7,17 @@ from utils.db_api.schemas.user import User
 async def add_user(user_id: int,
                    user_name: str,
                    shiba_name: str = None,
-                   pic_url: str = None):
+                   pic_url: str = None,
+                   weapon_id: int = None,
+                   outfit_id: int = None):
     try:
         user = User(
             user_id=user_id,
             user_name=user_name,
             shiba_name=shiba_name,
-            pic_url=pic_url
+            pic_url=pic_url,
+            weapon_id=weapon_id,
+            outfit_id=outfit_id
         )
         await user.create()
 

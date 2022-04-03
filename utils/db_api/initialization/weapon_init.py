@@ -4,6 +4,7 @@
 # from data import config
 # from utils.db_api.db_gino import db
 # ----------------------------------------------------------------------------
+from asyncpg import UndefinedTableError
 
 from utils.db_api import weapon_commands
 from utils.db_api.schemas.weapon import Weapon
@@ -19,8 +20,11 @@ async def weapon_init():
 
     # ------------------------------------
     # Для версии без внешних ключей
-    # await Weapon.__table__.gino.drop()
-    # await Weapon.__table__.gino.create()
+    try:
+        await Weapon.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    await Weapon.__table__.gino.create()
     # ------------------------------------
     await weapon_commands.add_weapon(
         weapon_id=1,

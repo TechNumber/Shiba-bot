@@ -4,6 +4,7 @@
 # from data import config
 # from utils.db_api.db_gino import db
 # ----------------------------------------------------------------------------
+from asyncpg import UndefinedTableError
 
 from utils.db_api import outfit_commands
 from utils.db_api.schemas.outfit import Outfit
@@ -19,8 +20,11 @@ async def outfit_init():
 
     # ------------------------------------
     # Для версии без внешних ключей
-    # await Outfit.__table__.gino.drop()
-    # await Outfit.__table__.gino.create()
+    try:
+        await Outfit.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    await Outfit.__table__.gino.create()
     # ------------------------------------
     await outfit_commands.add_outfit(
         outfit_id=1,

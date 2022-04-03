@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, BigInteger, String, sql, ForeignKey
-from sqlalchemy.orm import relationship
 
 from utils.db_api.db_gino import TimedBaseModel
 
@@ -20,13 +19,13 @@ class User(TimedBaseModel):
     exp = Column(Integer, default=0)
     weapon_id = Column(
         Integer,
-        ForeignKey('weapons.weapon_id', ondelete='SET NULL')
+        ForeignKey('weapons.weapon_id', ondelete='SET NULL'),
+        nullable=True
     )
-    weapon = relationship("Weapon")
     outfit_id = Column(
         Integer,
-        ForeignKey('outfits.outfit_id', ondelete='SET NULL')
+        ForeignKey('outfits.outfit_id', ondelete='SET NULL'),
+        nullable=True
     )
-    outfit = relationship("Outfit")
 
     query: sql.Select

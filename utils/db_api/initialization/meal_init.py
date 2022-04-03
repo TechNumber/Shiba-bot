@@ -4,6 +4,7 @@
 # from data import config
 # from utils.db_api.db_gino import db
 # ----------------------------------------------------------------------------
+from asyncpg import UndefinedTableError
 
 from utils.db_api import meal_commands
 from utils.db_api.schemas.meal import Meal
@@ -19,8 +20,11 @@ async def meal_init():
 
     # ------------------------------------
     # Для версии без внешних ключей
-    # await Meal.__table__.gino.drop()
-    # await Meal.__table__.gino.create()
+    try:
+        await Meal.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    await Meal.__table__.gino.create()
     # ------------------------------------
     await meal_commands.add_meal(
         meal_id=1,
