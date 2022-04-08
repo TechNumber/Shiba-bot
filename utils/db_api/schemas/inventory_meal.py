@@ -17,3 +17,5 @@ class InventoryMeal(TimedBaseModel):
     )
 
     query: sql.Select
+
+# TODO: добавить ограничение по количеству предметов в инвентаре

@@ -8,13 +8,14 @@ from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardBut
 from aiogram.utils import exceptions
 
 from keyboards.inline.callback_datas import choose_item_callback, buy_item_callback
+from keyboards.inline.meal_shop_menus import get_choose_meal_menu, buy_meal_menu
 from keyboards.inline.outfit_shop_menus import get_choose_outfit_menu, buy_outfit_menu
 from keyboards.inline.weapon_shop_menus import get_choose_weapon_menu, buy_weapon_menu
 from loader import dp
 from states.game_state import GameState
 from states.register_state import RegisterState
 from utils.db_api import weapon_commands, outfit_commands, meal_commands, inventory_weapon_commands, user_commands, \
-    inventory_outfit_commands
+    inventory_outfit_commands, inventory_meal_commands
 
 
 @dp.message_handler(Command("shop"), state=GameState.registered)
@@ -76,7 +77,6 @@ async def buy_weapon(call: CallbackQuery, callback_data: dict):
 
 @dp.callback_query_handler(text="show_items_outfit", state=GameState.shopping)
 async def show_items_outfit(call: CallbackQuery):
-    choose_outfit_menu = await get_choose_outfit_menu()
     await call.message.edit_reply_markup(await get_choose_outfit_menu())
     await call.answer(cache_time=15)
 
@@ -114,4 +114,46 @@ async def buy_outfit(call: CallbackQuery, callback_data: dict):
     else:
         await inventory_outfit_commands.add_inventory_outfit(user.user_id, outfit.outfit_id)
         await user_commands.update_user_money(user.user_id, user.money - outfit.outfit_price)
+    await cancel_buy(call)
+
+
+@dp.callback_query_handler(text="show_items_meal", state=GameState.shopping)
+async def show_items_meal(call: CallbackQuery):
+    await call.message.edit_reply_markup(await get_choose_meal_menu())
+    await call.answer(cache_time=15)
+
+
+@dp.callback_query_handler(choose_item_callback.filter(item_type="meal"), state=GameState.shopping)
+async def show_meal(call: CallbackQuery, callback_data: dict):
+    meal = await meal_commands.select_meal(int(callback_data.get("item_id")))
+    await call.message.edit_text(  # TODO: собирать описание предмета для магазина в БД
+        f'Название: {meal.meal_name}' + '\n'
+        f'Цена: {meal.meal_price}' + '\n'
+        f'Описание: {meal.meal_description}' + '\n'
+        "На сколько единиц увеличивает ловкость: {}\n".format(meal.health_add) if meal.health_add != 0 else ""
+        "Во сколько раз увеличивает ловкость: {}".format(meal.health_mpy) if meal.health_mpy != 1 else ""
+        "На сколько единиц увеличивает здоровье: {}\n".format(meal.health_add) if meal.health_add != 0 else ""
+        "Во сколько раз увеличивает ловкость: {}".format(meal.health_mpy) if meal.health_mpy != 1 else ""
+        "На сколько единиц увеличивает здоровье: {}\n".format(meal.health_add) if meal.health_add != 0 else ""
+        "Во сколько раз увеличивает ловкость: {}".format(meal.health_mpy) if meal.health_mpy != 1 else ""
+    )
+    buy_meal_menu.inline_keyboard[0][0].callback_data = buy_item_callback.new(
+        item_type="meal",
+        item_id=meal.meal_id
+    )
+    await call.message.edit_reply_markup(buy_meal_menu)
+
+
+@dp.callback_query_handler(buy_item_callback.filter(item_type="meal"), state=GameState.shopping)
+async def buy_meal(call: CallbackQuery, callback_data: dict):
+    meal = await meal_commands.select_meal(int(callback_data.get("item_id")))
+    user = await user_commands.select_user(user_id=call.from_user.id)
+    if user.money < meal.meal_price:
+        await call.answer(
+            f"Вам нужно на {meal.meal_price - user.money} монет больше, чтобы купить этот предмет",
+            cache_time=15
+        )
+    else:
+        await inventory_meal_commands.add_inventory_meal(user.user_id, meal.meal_id)
+        await user_commands.update_user_money(user.user_id, user.money - meal.meal_price)
     await cancel_buy(call)
