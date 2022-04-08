@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from asyncpg import UniqueViolationError
 
 from utils.db_api.schemas.meal import Meal
@@ -48,3 +50,45 @@ async def select_all_meals():
 async def select_meal(meal_id: int):
     meal = await Meal.query.where(Meal.meal_id == meal_id).gino.first()
     return meal
+
+
+async def generate_all_meals_chars():
+    meals = await select_all_meals()
+    for meal in meals:
+        await meal.update(
+            meal_chars=''.join([
+                'Название: {}\n'.format(meal.meal_name),
+                'Цена: {}\n'.format(meal.meal_price),
+                'Описание: {}\n'.format(meal.meal_description),
+                'На сколько минут увеличивает максимальное здоровье: {}\n'.format(
+                    meal.max_health_time
+                ) if meal.max_health_time != 0 else '',
+                'На сколько единиц увеличивает максимальное здоровье: {}\n'.format(
+                    meal.max_health_add
+                ) if meal.max_health_add != 0 else '',
+                'Во сколько раз увеличивает максимальное здоровье: {}\n'.format(
+                    Decimal(meal.max_health_mpy).quantize(Decimal('.1')).normalize()
+                ) if meal.max_health_mpy != 1 else '',
+
+                'На сколько минут увеличивает здоровье: {}\n'.format(
+                    meal.health_time
+                ) if meal.health_time != 0 else '',
+                'На сколько единиц увеличивает здоровье: {}\n'.format(
+                    meal.health_add
+                ) if meal.health_add != 0 else '',
+                'Полностью восстанавливает здоровье\n' if meal.health_mpy == -1 else
+                'Во сколько раз увеличивает здоровье: {}\n'.format(
+                    Decimal(meal.health_mpy).quantize(Decimal('.1')).normalize()
+                ) if meal.health_mpy != 1 else '',
+
+                'На сколько минут увеличивает силу: {}\n'.format(
+                    meal.strength_time
+                ) if meal.strength_time != 0 else '',
+                'На сколько единиц увеличивает силу: {}\n'.format(
+                    meal.strength_add
+                ) if meal.strength_add != 0 else '',
+                'Во сколько раз увеличивает силу: {}\n'.format(
+                    Decimal(meal.strength_mpy).quantize(Decimal('.1')).normalize()
+                ) if meal.strength_mpy != 1 else ''
+            ])
+        ).apply()

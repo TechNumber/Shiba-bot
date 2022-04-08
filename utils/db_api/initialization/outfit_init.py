@@ -31,7 +31,7 @@ async def outfit_init():
         outfit_name="Ошейник",
         outfit_price=0,
         outfit_description="Описание",
-        outfit_chars="Описание через f строки с выгрузкой эффектов",
+        outfit_chars="Описание через format строки с выгрузкой эффектов",
         health_add=10,
         health_mpy=1,
         agility_add=40,
@@ -44,7 +44,7 @@ async def outfit_init():
         outfit_name="Пальто",
         outfit_price=0,
         outfit_description="Описание",
-        outfit_chars="Описание через f строки с выгрузкой эффектов",
+        outfit_chars="Описание через format строки с выгрузкой эффектов",
         health_add=50,
         health_mpy=1,
         agility_add=-10,
@@ -57,7 +57,7 @@ async def outfit_init():
         outfit_name="Белые тапочки",
         outfit_price=0,
         outfit_description="Описание",
-        outfit_chars="Описание через f строки с выгрузкой эффектов",
+        outfit_chars="Описание через format строки с выгрузкой эффектов",
         health_add=100,
         health_mpy=1,
         agility_add=10,
@@ -70,7 +70,7 @@ async def outfit_init():
         outfit_name="Деревянный нагрудник",
         outfit_price=0,
         outfit_description="Описание",
-        outfit_chars="Описание через f строки с выгрузкой эффектов",
+        outfit_chars="Описание через format строки с выгрузкой эффектов",
         health_add=100,
         health_mpy=1,
         agility_add=-10,
@@ -83,7 +83,7 @@ async def outfit_init():
         outfit_name="Металлические латы",
         outfit_price=0,
         outfit_description="Описание",
-        outfit_chars="Описание через f строки с выгрузкой эффектов",
+        outfit_chars="Описание через format строки с выгрузкой эффектов",
         health_add=1000,
         health_mpy=1,
         agility_add=10,
@@ -91,6 +91,7 @@ async def outfit_init():
         strength_add=100,
         strength_mpy=1
     )
+    await outfit_commands.generate_all_outfits_chars()
 
 # ----------------------------------------------------------------------------
 # Для создания исключительно этой таблицы при запуске конкретно из этого файла

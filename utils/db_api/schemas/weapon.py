@@ -15,7 +15,7 @@ class Weapon(TimedBaseModel):
     weapon_name = Column(String(100))
     weapon_price = Column(Integer)
     weapon_description = Column(String(255))
-    weapon_chars = Column(String(255))
+    weapon_chars = Column(String(1000))
     damage = Column(Integer)  # Сколько урона наносит
     agility_add = Column(Integer)  # На сколько единиц увеличивается ловкость
     agility_mpy = Column(Float)  # Во сколько раз увеличивается ловкость

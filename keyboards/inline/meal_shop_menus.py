@@ -21,8 +21,7 @@ async def get_choose_meal_menu():
                 )
             ]
         ],
-        resize_keyboard=True#,
-        #selective=True
+        resize_keyboard=True
     )
     meals = await meal_commands.select_all_meals()
     meal_buttons = [InlineKeyboardButton(
@@ -55,6 +54,5 @@ buy_meal_menu = InlineKeyboardMarkup(
             )
         ],
     ],
-    resize_keyboard=True#,
-    #selective=True
+    resize_keyboard=True
 )

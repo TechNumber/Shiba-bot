@@ -21,8 +21,7 @@ async def get_choose_weapon_menu():
                 )
             ]
         ],
-        resize_keyboard=True#,
-        #selective=True
+        resize_keyboard=True
     )
     weapons = await weapon_commands.select_all_weapons()
     weapon_buttons = [InlineKeyboardButton(
@@ -55,6 +54,5 @@ buy_weapon_menu = InlineKeyboardMarkup(
             )
         ],
     ],
-    resize_keyboard=True#,
-    #selective=True
+    resize_keyboard=True
 )

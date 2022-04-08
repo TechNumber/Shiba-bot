@@ -31,7 +31,7 @@ async def meal_init():
         meal_name="Сухой корм",
         meal_price=25,
         meal_description="Описание",
-        meal_chars="Описание через f строки с выгрузкой эффектов",
+        meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=0,
         max_health_mpy=1,
@@ -47,7 +47,7 @@ async def meal_init():
         meal_name="Говяжья кость",
         meal_price=70,
         meal_description="Описание",
-        meal_chars="Описание через f строки с выгрузкой эффектов",
+        meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=0,
         max_health_mpy=1,
@@ -63,7 +63,7 @@ async def meal_init():
         meal_name="Листик мяты",
         meal_price=250,
         meal_description="Описание",
-        meal_chars="Описание через f строки с выгрузкой эффектов",
+        meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=0,
         max_health_mpy=1,
@@ -79,7 +79,7 @@ async def meal_init():
         meal_name="Утиная грудка",
         meal_price=200,
         meal_description="Описание",
-        meal_chars="Описание через f строки с выгрузкой эффектов",
+        meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=0,
         max_health_mpy=1,
@@ -95,7 +95,7 @@ async def meal_init():
         meal_name="Каре ягненка",
         meal_price=200,
         meal_description="Описание",
-        meal_chars="Описание через f строки с выгрузкой эффектов",
+        meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=0,
         max_health_mpy=1,
@@ -111,7 +111,7 @@ async def meal_init():
         meal_name="Черная икра",
         meal_price=1000,
         meal_description="Описание",
-        meal_chars="Описание через f строки с выгрузкой эффектов",
+        meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=0,
         max_health_mpy=1,
@@ -127,7 +127,7 @@ async def meal_init():
         meal_name="Фуа-гра",
         meal_price=10000,
         meal_description="Описание",
-        meal_chars="Описание через f строки с выгрузкой эффектов",
+        meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
         max_health_add=1000,
         max_health_mpy=1,
@@ -138,6 +138,7 @@ async def meal_init():
         strength_add=0,
         strength_mpy=1
     )
+    await meal_commands.generate_all_meals_chars()
 
 # ----------------------------------------------------------------------------
 # Для создания исключительно этой таблицы при запуске конкретно из этого файла

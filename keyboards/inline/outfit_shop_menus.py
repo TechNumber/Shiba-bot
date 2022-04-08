@@ -25,8 +25,7 @@ async def get_choose_outfit_menu():
                 )
             ]
         ],
-        resize_keyboard=True#,
-        #selective=True
+        resize_keyboard=True
     )
     outfits = await outfit_commands.select_all_outfits()
     outfit_buttons = [InlineKeyboardButton(
@@ -59,6 +58,5 @@ buy_outfit_menu = InlineKeyboardMarkup(
             )
         ],
     ],
-    resize_keyboard=True#,
-    #selective=True
+    resize_keyboard=True
 )

@@ -15,7 +15,7 @@ class Outfit(TimedBaseModel):
     outfit_name = Column(String(100))
     outfit_price = Column(Integer)
     outfit_description = Column(String(255))
-    outfit_chars = Column(String(255))
+    outfit_chars = Column(String(1000))
     health_add = Column(Integer)  # На сколько единиц увеличивается текущее здоровье
     health_mpy = Column(Float)  # Во сколько раз увеличивается текущее здоровье
     agility_add = Column(Integer)  # На сколько единиц увеличивается ловкость

@@ -31,7 +31,7 @@ async def weapon_init():
         weapon_name="Палка",
         weapon_price=0,
         weapon_description="Описание",
-        weapon_chars="Описание через f строки с выгрузкой эффектов",
+        weapon_chars="Описание через format строки с выгрузкой эффектов",
         damage=30,
         agility_add=20,
         agility_mpy=1,
@@ -43,7 +43,7 @@ async def weapon_init():
         weapon_name="Ржавый меч",
         weapon_price=0,
         weapon_description="Описание",
-        weapon_chars="Описание через f строки с выгрузкой эффектов",
+        weapon_chars="Описание через format строки с выгрузкой эффектов",
         damage=50,
         agility_add=10,
         agility_mpy=1,
@@ -55,7 +55,7 @@ async def weapon_init():
         weapon_name="Дубина переговоров",
         weapon_price=0,
         weapon_description="Описание",
-        weapon_chars="Описание через f строки с выгрузкой эффектов",
+        weapon_chars="Описание через format строки с выгрузкой эффектов",
         damage=100,
         agility_add=-5,
         agility_mpy=1,
@@ -67,7 +67,7 @@ async def weapon_init():
         weapon_name="Костяной зуб",
         weapon_price=0,
         weapon_description="Описание",
-        weapon_chars="Описание через f строки с выгрузкой эффектов",
+        weapon_chars="Описание через format строки с выгрузкой эффектов",
         damage=1000,
         agility_add=30,
         agility_mpy=1,
@@ -79,13 +79,14 @@ async def weapon_init():
         weapon_name="Вампир",
         weapon_price=0,
         weapon_description="Описание",
-        weapon_chars="Описание через f строки с выгрузкой эффектов",
+        weapon_chars="Описание через format строки с выгрузкой эффектов",
         damage=950,
         agility_add=30,
         agility_mpy=1,
         health_add=100,
         health_mpy=1
     )
+    await weapon_commands.generate_all_weapons_chars()
 
 # ----------------------------------------------------------------------------
 # Для создания исключительно этой таблицы при запуске конкретно из этого файла

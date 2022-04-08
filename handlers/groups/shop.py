@@ -1,6 +1,3 @@
-# Купить может только пользователь в состоянии "shop".
-# TODO: selective
-
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.builtin import Command, StateFilter
@@ -16,6 +13,12 @@ from states.game_state import GameState
 from states.register_state import RegisterState
 from utils.db_api import weapon_commands, outfit_commands, meal_commands, inventory_weapon_commands, user_commands, \
     inventory_outfit_commands, inventory_meal_commands
+
+
+# TODO: только пользователь, вызвавший магазин, может покупать в нём что-то. Реализация:
+# проверять, совпадают ли id пользователя, вызвавшего магазин, и пользователя,
+# нажавшего кнопку магазина. Либо записывать в информацию состояния id пользователя и
+# фильтровать по нему в фильтре состояния
 
 
 @dp.message_handler(Command("shop"), state=GameState.registered)
@@ -43,16 +46,7 @@ async def cancel_buy(call: CallbackQuery):
 @dp.callback_query_handler(choose_item_callback.filter(item_type="weapon"), state=GameState.shopping)
 async def show_weapon(call: CallbackQuery, callback_data: dict):
     weapon = await weapon_commands.select_weapon(int(callback_data.get("item_id")))
-    await call.message.edit_text(
-        f'Название: {weapon.weapon_name}' + '\n'
-        f'Цена: {weapon.weapon_price}' + '\n'
-        f'Описание: {weapon.weapon_description}' + '\n'
-        f'Урон: {weapon.damage}' + '\n'
-        "На сколько единиц увеличивает ловкость: {}\n".format(weapon.agility_add) if weapon.agility_add != 0 else ""
-        "Во сколько раз увеличивает ловкость: {}".format(weapon.agility_mpy) if weapon.agility_mpy != 1 else ""
-        "На сколько единиц увеличивает здоровье: {}\n".format(weapon.health_add) if weapon.health_add != 0 else ""
-        "Во сколько раз увеличивает ловкость: {}".format(weapon.health_mpy) if weapon.health_mpy != 1 else ""
-    )
+    await call.message.edit_text(weapon.weapon_chars)
     buy_weapon_menu.inline_keyboard[0][0].callback_data = buy_item_callback.new(
         item_type="weapon",
         item_id=weapon.weapon_id
@@ -84,17 +78,7 @@ async def show_items_outfit(call: CallbackQuery):
 @dp.callback_query_handler(choose_item_callback.filter(item_type="outfit"), state=GameState.shopping)
 async def show_outfit(call: CallbackQuery, callback_data: dict):
     outfit = await outfit_commands.select_outfit(int(callback_data.get("item_id")))
-    await call.message.edit_text(  # TODO: собирать описание предмета для магазина в БД
-        f'Название: {outfit.outfit_name}' + '\n'
-        f'Цена: {outfit.outfit_price}' + '\n'
-        f'Описание: {outfit.outfit_description}' + '\n'
-        "На сколько единиц увеличивает ловкость: {}\n".format(outfit.agility_add) if outfit.agility_add != 0 else ""
-        "Во сколько раз увеличивает ловкость: {}".format(outfit.agility_mpy) if outfit.agility_mpy != 1 else ""
-        "На сколько единиц увеличивает здоровье: {}\n".format(outfit.health_add) if outfit.health_add != 0 else ""
-        "Во сколько раз увеличивает ловкость: {}".format(outfit.health_mpy) if outfit.health_mpy != 1 else ""
-        "На сколько единиц увеличивает здоровье: {}\n".format(outfit.strength_add) if outfit.strength_add != 0 else ""
-        "Во сколько раз увеличивает ловкость: {}".format(outfit.strength_mpy) if outfit.strength_mpy != 1 else ""
-    )
+    await call.message.edit_text(outfit.outfit_chars)
     buy_outfit_menu.inline_keyboard[0][0].callback_data = buy_item_callback.new(
         item_type="outfit",
         item_id=outfit.outfit_id
@@ -126,17 +110,7 @@ async def show_items_meal(call: CallbackQuery):
 @dp.callback_query_handler(choose_item_callback.filter(item_type="meal"), state=GameState.shopping)
 async def show_meal(call: CallbackQuery, callback_data: dict):
     meal = await meal_commands.select_meal(int(callback_data.get("item_id")))
-    await call.message.edit_text(  # TODO: собирать описание предмета для магазина в БД
-        f'Название: {meal.meal_name}' + '\n'
-        f'Цена: {meal.meal_price}' + '\n'
-        f'Описание: {meal.meal_description}' + '\n'
-        "На сколько единиц увеличивает ловкость: {}\n".format(meal.health_add) if meal.health_add != 0 else ""
-        "Во сколько раз увеличивает ловкость: {}".format(meal.health_mpy) if meal.health_mpy != 1 else ""
-        "На сколько единиц увеличивает здоровье: {}\n".format(meal.health_add) if meal.health_add != 0 else ""
-        "Во сколько раз увеличивает ловкость: {}".format(meal.health_mpy) if meal.health_mpy != 1 else ""
-        "На сколько единиц увеличивает здоровье: {}\n".format(meal.health_add) if meal.health_add != 0 else ""
-        "Во сколько раз увеличивает ловкость: {}".format(meal.health_mpy) if meal.health_mpy != 1 else ""
-    )
+    await call.message.edit_text(meal.meal_chars)
     buy_meal_menu.inline_keyboard[0][0].callback_data = buy_item_callback.new(
         item_type="meal",
         item_id=meal.meal_id
