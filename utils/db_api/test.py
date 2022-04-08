@@ -6,6 +6,7 @@ from data import config
 from utils.db_api import user_commands, all_init, duel_commands, inventory_outfit_commands
 from utils.db_api.db_gino import db
 from utils.db_api.schemas.duel import Duel
+from utils.db_api.schemas.inventory_meal import InventoryMeal
 from utils.db_api.schemas.inventory_outfit import InventoryOutfit
 from utils.db_api.schemas.user import User
 from utils.db_api.schemas.weapon import Weapon
@@ -28,6 +29,10 @@ async def test():
     except UndefinedTableError:
         pass
     try:
+        await InventoryMeal.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    try:
         await User.__table__.gino.drop()
     except UndefinedTableError:
         pass
@@ -35,6 +40,7 @@ async def test():
     await User.__table__.gino.create()
     await InventoryOutfit.__table__.gino.create()
     await InventoryWeapon.__table__.gino.create()
+    await InventoryMeal.__table__.gino.create()
     await Duel.__table__.gino.create()
     print("Добавляем пользователей")
     await user_commands.add_user(1, "One", "email")
