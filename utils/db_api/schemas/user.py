@@ -1,10 +1,17 @@
 from sqlalchemy import Column, Integer, BigInteger, String, sql, ForeignKey
+from sqlalchemy.orm import relationship, backref
 
 from utils.db_api.db_gino import TimedBaseModel
 
 
 class User(TimedBaseModel):
     __tablename__ = 'users'
+
+    inventory_weapons = relationship("InventoryWeapon", backref=backref("users", cascade='delete'),
+                                     passive_deletes=True)
+    inventory_outfits = relationship("InventoryOutfit", backref=backref("users", cascade='delete'),
+                                     passive_deletes=True)
+
     user_id = Column(BigInteger, primary_key=True)
     user_name = Column(String(100))
     shiba_name = Column(String(100))

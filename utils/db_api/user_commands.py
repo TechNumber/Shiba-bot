@@ -45,6 +45,11 @@ async def update_shiba_name(user_id, shiba_name):
     await user.update(shiba_name=shiba_name).apply()
 
 
+async def update_user_money(user_id, money):
+    user = await User.get(user_id)
+    await user.update(money=money).apply()
+
+
 async def get_all_users_id():
     user_id_list = await User.query.gino.load(User.user_id).all()
     return user_id_list

@@ -1,11 +1,13 @@
 from aiogram import types
-from aiogram.dispatcher.filters import Command
+from aiogram.dispatcher.filters import Command, StateFilter
 
+from states.game_state import GameState
+from states.register_state import RegisterState
 from utils.db_api import user_commands
 from loader import dp, bot
 
 
-@dp.message_handler(Command("duel"))
+@dp.message_handler(Command("duel"), state=GameState.registered)
 async def duel_call_out(message: types.Message):
     user_id_list = await user_commands.get_all_users_id()
     blocks = message.md_text.strip().split()

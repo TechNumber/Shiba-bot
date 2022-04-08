@@ -3,9 +3,10 @@ import asyncio
 from asyncpg import UndefinedTableError
 
 from data import config
-from utils.db_api import user_commands, all_init, duel_commands
+from utils.db_api import user_commands, all_init, duel_commands, inventory_outfit_commands
 from utils.db_api.db_gino import db
 from utils.db_api.schemas.duel import Duel
+from utils.db_api.schemas.inventory_outfit import InventoryOutfit
 from utils.db_api.schemas.user import User
 from utils.db_api.schemas.weapon import Weapon
 from utils.db_api.schemas.inventory_weapon import InventoryWeapon
@@ -23,13 +24,18 @@ async def test():
     except UndefinedTableError:
         pass
     try:
+        await InventoryOutfit.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    try:
         await User.__table__.gino.drop()
     except UndefinedTableError:
         pass
     await all_init.all_init()
     await User.__table__.gino.create()
-    await Duel.__table__.gino.create()
+    await InventoryOutfit.__table__.gino.create()
     await InventoryWeapon.__table__.gino.create()
+    await Duel.__table__.gino.create()
     print("Добавляем пользователей")
     await user_commands.add_user(1, "One", "email")
     await user_commands.add_user(2, "Vasya", "vv@gmail.com")
@@ -72,10 +78,16 @@ async def test():
     # id_list = await user_commands.get_all_users_id()
     # print(id_list)
     await inventory_weapon_commands.add_inventory_weapon(1, 1)
+    await inventory_outfit_commands.add_inventory_outfit(1, 1)
     await inventory_weapon_commands.add_inventory_weapon(1, 1)
+    await inventory_outfit_commands.add_inventory_outfit(1, 1)
+
     await inventory_weapon_commands.discard_inventory_weapon(1, 1)
+    await inventory_outfit_commands.discard_inventory_outfit(1, 1)
     await inventory_weapon_commands.discard_inventory_weapon(1, 1)
+    await inventory_outfit_commands.discard_inventory_outfit(1, 1)
     await inventory_weapon_commands.discard_inventory_weapon(1, 1)
+    await inventory_outfit_commands.discard_inventory_outfit(1, 1)
 
     user = await User.query.where(User.user_id == 6).gino.first()
     print(user)

@@ -8,6 +8,8 @@ class Outfit(TimedBaseModel):
     __tablename__ = 'outfits'
     outfit_id = Column(Integer, primary_key=True)
 
+    inventory_outfits = relationship("InventoryOutfit", backref=backref("outfits", cascade='delete'),
+                                     passive_deletes=True)
     users = relationship("User", backref=backref("outfits", cascade='delete'), passive_deletes=True)
 
     outfit_name = Column(String(100))

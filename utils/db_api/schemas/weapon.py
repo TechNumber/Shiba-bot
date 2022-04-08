@@ -8,7 +8,8 @@ class Weapon(TimedBaseModel):
     __tablename__ = 'weapons'
     weapon_id = Column(Integer, primary_key=True)
 
-    inventory_weapons = relationship("InventoryWeapon", backref=backref("weapons", cascade='delete'), passive_deletes=True)
+    inventory_weapons = relationship("InventoryWeapon", backref=backref("weapons", cascade='delete'),
+                                     passive_deletes=True)
     users = relationship("User", backref=backref("weapons", cascade='delete'), passive_deletes=True)
 
     weapon_name = Column(String(100))
