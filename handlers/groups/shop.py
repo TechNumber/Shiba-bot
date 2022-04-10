@@ -1,60 +1,51 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters.builtin import Command, StateFilter
-from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
-from aiogram.utils import exceptions
+from aiogram.dispatcher.filters.builtin import Command
+from aiogram.types import CallbackQuery
 
-from keyboards.inline.callback_datas import choose_item_callback, buy_item_callback
-from keyboards.inline.meal_shop_menus import get_choose_meal_menu, buy_meal_menu
-from keyboards.inline.outfit_shop_menus import get_choose_outfit_menu, buy_outfit_menu
-from keyboards.inline.weapon_shop_menus import get_choose_weapon_menu, buy_weapon_menu
+from filters import IsCalledByOwner
+from keyboards.inline.callback_datas import buy_item_callback, cancel_callback, show_item_callback, \
+    show_shop_items_callback
+from keyboards.inline.shop.meal_shop_menus import get_shop_all_meals_menu, get_shop_meal_menu
+from keyboards.inline.shop.outfit_shop_menus import get_shop_all_outfits_menu, get_shop_outfit_menu
+from keyboards.inline.shop.weapon_shop_menus import get_shop_all_weapons_menu, get_shop_weapon_menu
 from loader import dp
 from states.game_state import GameState
-from states.register_state import RegisterState
 from utils.db_api import weapon_commands, outfit_commands, meal_commands, inventory_weapon_commands, user_commands, \
     inventory_outfit_commands, inventory_meal_commands
 
 
-# TODO: только пользователь, вызвавший магазин, может покупать в нём что-то. Реализация:
-# проверять, совпадают ли id пользователя, вызвавшего магазин, и пользователя,
-# нажавшего кнопку магазина. Либо записывать в информацию состояния id пользователя и
-# фильтровать по нему в фильтре состояния
-
-
 @dp.message_handler(Command("shop"), state=GameState.registered)
-async def show_items(message: types.Message, state: FSMContext):
-    choose_weapon_menu = await get_choose_weapon_menu()
+async def show_shop_weapons(message: types.Message):
+    shop_weapons_menu = await get_shop_all_weapons_menu(user_id=message.from_user.id)
     await message.answer("Выберите товар из меню ниже",
-                         reply_markup=choose_weapon_menu)
+                         reply_markup=shop_weapons_menu)
     await GameState.shopping.set()
 
 
-@dp.callback_query_handler(text="cancel_shop", state=GameState.shopping)
+@dp.callback_query_handler(IsCalledByOwner(), cancel_callback.filter(cancel_type="shop"), state=GameState.shopping)
 async def cancel_shop(call: CallbackQuery):
     await call.message.edit_reply_markup()
     await call.answer(cache_time=15)
     await GameState.registered.set()
 
 
-@dp.callback_query_handler(text="cancel_buy", state=GameState.shopping)
+@dp.callback_query_handler(IsCalledByOwner(), cancel_callback.filter(cancel_type="buy"), state=GameState.shopping)
 async def cancel_buy(call: CallbackQuery):
     await call.message.edit_text("Выберите товар из меню ниже")
-    await call.message.edit_reply_markup(await get_choose_weapon_menu())
+    await call.message.edit_reply_markup(await get_shop_all_weapons_menu(user_id=call.from_user.id))
     await call.answer(cache_time=15)
 
 
-@dp.callback_query_handler(choose_item_callback.filter(item_type="weapon"), state=GameState.shopping)
+@dp.callback_query_handler(IsCalledByOwner(), show_item_callback.filter(item_type="weapon"), state=GameState.shopping)
 async def show_weapon(call: CallbackQuery, callback_data: dict):
     weapon = await weapon_commands.select_weapon(int(callback_data.get("item_id")))
     await call.message.edit_text(weapon.weapon_chars)
-    buy_weapon_menu.inline_keyboard[0][0].callback_data = buy_item_callback.new(
-        item_type="weapon",
-        item_id=weapon.weapon_id
-    )
-    await call.message.edit_reply_markup(buy_weapon_menu)
+    await call.message.edit_reply_markup(
+        await get_shop_weapon_menu(user_id=call.from_user.id, weapon_id=weapon.weapon_id))
 
 
-@dp.callback_query_handler(buy_item_callback.filter(item_type="weapon"), state=GameState.shopping)
+@dp.callback_query_handler(IsCalledByOwner(), buy_item_callback.filter(item_type="weapon"), state=GameState.shopping)
 async def buy_weapon(call: CallbackQuery, callback_data: dict):
     weapon = await weapon_commands.select_weapon(int(callback_data.get("item_id")))
     user = await user_commands.select_user(user_id=call.from_user.id)
@@ -69,24 +60,22 @@ async def buy_weapon(call: CallbackQuery, callback_data: dict):
     await cancel_buy(call)
 
 
-@dp.callback_query_handler(text="show_items_outfit", state=GameState.shopping)
-async def show_items_outfit(call: CallbackQuery):
-    await call.message.edit_reply_markup(await get_choose_outfit_menu())
+@dp.callback_query_handler(IsCalledByOwner(), show_shop_items_callback.filter(item_type="outfit"),
+                           state=GameState.shopping)
+async def show_shop_outfits(call: CallbackQuery):
+    await call.message.edit_reply_markup(await get_shop_all_outfits_menu(user_id=call.from_user.id))
     await call.answer(cache_time=15)
 
 
-@dp.callback_query_handler(choose_item_callback.filter(item_type="outfit"), state=GameState.shopping)
+@dp.callback_query_handler(IsCalledByOwner(), show_item_callback.filter(item_type="outfit"), state=GameState.shopping)
 async def show_outfit(call: CallbackQuery, callback_data: dict):
     outfit = await outfit_commands.select_outfit(int(callback_data.get("item_id")))
     await call.message.edit_text(outfit.outfit_chars)
-    buy_outfit_menu.inline_keyboard[0][0].callback_data = buy_item_callback.new(
-        item_type="outfit",
-        item_id=outfit.outfit_id
-    )
-    await call.message.edit_reply_markup(buy_outfit_menu)
+    await call.message.edit_reply_markup(
+        await get_shop_outfit_menu(user_id=call.from_user.id, outfit_id=outfit.outfit_id))
 
 
-@dp.callback_query_handler(buy_item_callback.filter(item_type="outfit"), state=GameState.shopping)
+@dp.callback_query_handler(IsCalledByOwner(), buy_item_callback.filter(item_type="outfit"), state=GameState.shopping)
 async def buy_outfit(call: CallbackQuery, callback_data: dict):
     outfit = await outfit_commands.select_outfit(int(callback_data.get("item_id")))
     user = await user_commands.select_user(user_id=call.from_user.id)
@@ -101,24 +90,21 @@ async def buy_outfit(call: CallbackQuery, callback_data: dict):
     await cancel_buy(call)
 
 
-@dp.callback_query_handler(text="show_items_meal", state=GameState.shopping)
-async def show_items_meal(call: CallbackQuery):
-    await call.message.edit_reply_markup(await get_choose_meal_menu())
+@dp.callback_query_handler(IsCalledByOwner(), show_shop_items_callback.filter(item_type="meal"),
+                           state=GameState.shopping)
+async def show_shop_meals(call: CallbackQuery):
+    await call.message.edit_reply_markup(await get_shop_all_meals_menu(user_id=call.from_user.id))
     await call.answer(cache_time=15)
 
 
-@dp.callback_query_handler(choose_item_callback.filter(item_type="meal"), state=GameState.shopping)
+@dp.callback_query_handler(IsCalledByOwner(), show_item_callback.filter(item_type="meal"), state=GameState.shopping)
 async def show_meal(call: CallbackQuery, callback_data: dict):
     meal = await meal_commands.select_meal(int(callback_data.get("item_id")))
     await call.message.edit_text(meal.meal_chars)
-    buy_meal_menu.inline_keyboard[0][0].callback_data = buy_item_callback.new(
-        item_type="meal",
-        item_id=meal.meal_id
-    )
-    await call.message.edit_reply_markup(buy_meal_menu)
+    await call.message.edit_reply_markup(await get_shop_meal_menu(user_id=call.from_user.id, meal_id=meal.meal_id))
 
 
-@dp.callback_query_handler(buy_item_callback.filter(item_type="meal"), state=GameState.shopping)
+@dp.callback_query_handler(IsCalledByOwner(), buy_item_callback.filter(item_type="meal"), state=GameState.shopping)
 async def buy_meal(call: CallbackQuery, callback_data: dict):
     meal = await meal_commands.select_meal(int(callback_data.get("item_id")))
     user = await user_commands.select_user(user_id=call.from_user.id)
@@ -131,3 +117,37 @@ async def buy_meal(call: CallbackQuery, callback_data: dict):
         await inventory_meal_commands.add_inventory_meal(user.user_id, meal.meal_id)
         await user_commands.update_user_money(user.user_id, user.money - meal.meal_price)
     await cancel_buy(call)
+
+
+"""
+@dp.callback_query_handler(IsCalledByOwner(), text="show_shop_meals", state=GameState.shopping)
+async def show_shop_meals(call: CallbackQuery):
+    await call.message.edit_reply_markup(await get_shop_all_meals_menu())
+    await call.answer(cache_time=15)
+
+
+@dp.callback_query_handler(IsCalledByOwner(), choose_item_callback.filter(item_type="meal"), state=GameState.shopping)
+async def show_meal(call: CallbackQuery, callback_data: dict):
+    meal = await meal_commands.select_meal(int(callback_data.get("item_id")))
+    await call.message.edit_text(meal.meal_chars)
+    buy_meal_menu.inline_keyboard[0][0].callback_data = buy_item_callback.new(
+        item_type="meal",
+        item_id=meal.meal_id
+    )
+    await call.message.edit_reply_markup(buy_meal_menu)
+
+
+@dp.callback_query_handler(IsCalledByOwner(), buy_item_callback.filter(item_type="meal"), state=GameState.shopping)
+async def buy_meal(call: CallbackQuery, callback_data: dict):
+    meal = await meal_commands.select_meal(int(callback_data.get("item_id")))
+    user = await user_commands.select_user(user_id=call.from_user.id)
+    if user.money < meal.meal_price:
+        await call.answer(
+            f"Вам нужно на {meal.meal_price - user.money} монет больше, чтобы купить этот предмет",
+            cache_time=15
+        )
+    else:
+        await inventory_meal_commands.add_inventory_meal(user.user_id, meal.meal_id)
+        await user_commands.update_user_money(user.user_id, user.money - meal.meal_price)
+    await cancel_buy(call)
+"""

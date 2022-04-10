@@ -2,7 +2,6 @@ from aiogram import types
 from aiogram.dispatcher.filters import Command, StateFilter
 
 from states.game_state import GameState
-from states.register_state import RegisterState
 from utils.db_api import user_commands
 from loader import dp, bot
 

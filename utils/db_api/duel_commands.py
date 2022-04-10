@@ -1,4 +1,7 @@
+import hashlib
+
 from asyncpg import UniqueViolationError
+from sqlalchemy import and_
 
 from utils.db_api.db_gino import db
 from utils.db_api.schemas.duel import Duel
@@ -8,7 +11,7 @@ async def add_duel(sender_id: int,
                    receiver_id: int):
     try:
         duel = Duel(
-            duel_id=hash(str(sender_id) + str(receiver_id)),
+            duel_id=int(hashlib.sha256((str(sender_id) + str(receiver_id)).encode('utf-8')).hexdigest(), 16) % 10 ** 8,
             sender_id=sender_id,
             receiver_id=receiver_id,
         )
@@ -21,8 +24,10 @@ async def add_duel(sender_id: int,
 async def delete_duel(sender_id: int,
                       receiver_id: int):
     duel = await Duel.query.where(
-        Duel.sender_id == Duel.sender_id,
-        Duel.receiver_id == Duel.receiver_id
+        and_(
+            Duel.sender_id == Duel.sender_id,
+            Duel.receiver_id == Duel.receiver_id
+        )
     ).gino.first()
     if duel is not None:
         duel.delete()

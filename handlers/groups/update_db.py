@@ -5,8 +5,6 @@ from aiogram.utils.markdown import hcode
 
 from loader import dp
 from states.game_state import GameState
-from states.naming_state import NamingState
-from states.register_state import RegisterState
 from utils.db_api import user_commands as commands
 
 

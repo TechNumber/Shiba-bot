@@ -3,7 +3,6 @@ from aiogram.dispatcher.filters import StateFilter
 
 from loader import dp
 from states.game_state import GameState
-from states.register_state import RegisterState
 
 
 @dp.message_handler(state=GameState.shopping)

@@ -11,6 +11,10 @@ class User(TimedBaseModel):
                                      passive_deletes=True)
     inventory_outfits = relationship("InventoryOutfit", backref=backref("users", cascade='delete'),
                                      passive_deletes=True)
+    inventory_meals = relationship("InventoryMeal", backref=backref("users", cascade='delete'),
+                                   passive_deletes=True)
+    duels = relationship("Duel", backref=backref("users", cascade='delete'),
+                         passive_deletes=True)
 
     user_id = Column(BigInteger, primary_key=True)
     user_name = Column(String(100))

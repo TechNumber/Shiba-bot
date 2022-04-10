@@ -1,10 +1,15 @@
 from sqlalchemy import Column, Integer, Float, String, sql
+from sqlalchemy.orm import relationship, backref
 
 from utils.db_api.db_gino import TimedBaseModel
 
 
 class Meal(TimedBaseModel):
     __tablename__ = 'meals'
+
+    inventory_meals = relationship("InventoryMeal", backref=backref("meals", cascade='delete'),
+                                   passive_deletes=True)
+
     meal_id = Column(Integer, primary_key=True)
     meal_name = Column(String(100))  # Название
     meal_price = Column(Integer)  # Стоимость

@@ -50,6 +50,11 @@ async def update_user_money(user_id, money):
     await user.update(money=money).apply()
 
 
+async def update_user_weapon(user_id, weapon_id):
+    user = await User.get(user_id)
+    await user.update(weapon_id=weapon_id).apply()
+
+
 async def get_all_users_id():
     user_id_list = await User.query.gino.load(User.user_id).all()
     return user_id_list

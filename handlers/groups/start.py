@@ -3,7 +3,6 @@ from aiogram.dispatcher.filters.builtin import CommandStart
 
 from loader import dp
 from states.game_state import GameState
-from states.register_state import RegisterState
 from utils.db_api import user_commands as commands
 
 
