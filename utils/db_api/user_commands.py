@@ -55,6 +55,21 @@ async def update_user_weapon(user_id, weapon_id):
     await user.update(weapon_id=weapon_id).apply()
 
 
+async def update_user_outfit(user_id, outfit_id):
+    user = await User.get(user_id)
+    await user.update(outfit_id=outfit_id).apply()
+
+
+async def set_weapon_null(user_id):
+    user = await User.get(user_id)
+    await user.update(weapon_id=None).apply()
+
+
+async def set_outfit_null(user_id):
+    user = await User.get(user_id)
+    await user.update(outfit_id=None).apply()
+
+
 async def get_all_users_id():
     user_id_list = await User.query.gino.load(User.user_id).all()
     return user_id_list

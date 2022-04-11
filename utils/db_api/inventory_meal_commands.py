@@ -2,6 +2,7 @@ from asyncpg import UniqueViolationError
 from sqlalchemy import and_
 import hashlib
 
+from utils.db_api import meal_commands
 from utils.db_api.schemas.inventory_meal import InventoryMeal
 
 
@@ -41,3 +42,22 @@ async def discard_inventory_meal(user_id: int,
             await inventory_meal.delete()
     else:
         print("Запись не найдена")
+
+
+async def select_all_meals_by_user_id(user_id: int):
+    entries = await InventoryMeal.query.where(
+        InventoryMeal.user_id == user_id
+    ).gino.all()
+    meals = [await meal_commands.select_meal(entry.meal_id) for entry in entries]
+    return meals
+
+
+async def get_meal_amount(user_id: int, meal_id: int):
+    entry = await InventoryMeal.query.where(
+        and_(
+            InventoryMeal.user_id == user_id,
+            InventoryMeal.meal_id == meal_id
+        )
+    ).gino.first()
+    return entry.amount
+

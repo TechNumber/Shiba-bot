@@ -1,15 +1,15 @@
 import math
 
-from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from keyboards.inline.callback_datas import buy_item_callback, discard_item_callback, cancel_callback, \
+from keyboards.inline.callback_datas import discard_item_callback, cancel_callback, \
     equip_item_callback, show_item_callback
-from utils.db_api import weapon_commands, inventory_weapon_commands
+from utils.db_api import inventory_weapon_commands
 from utils.db_api.inventory_weapon_commands import get_weapon_amount
 
 
 async def get_inventory_all_weapons_menu(user_id: int):
-    inventory_weapon_menu = InlineKeyboardMarkup(
+    inventory_weapons_menu = InlineKeyboardMarkup(
         row_width=2,
         inline_keyboard=[
             [
@@ -38,8 +38,8 @@ async def get_inventory_all_weapons_menu(user_id: int):
     ) for weapon in weapons]
     weapon_rows = [weapon_buttons[i * 2:i * 2 + 2] for i in range(math.ceil(len(weapon_buttons) / 2))]
     for row in weapon_rows:
-        inventory_weapon_menu.inline_keyboard.insert(-1, row)
-    return inventory_weapon_menu
+        inventory_weapons_menu.inline_keyboard.insert(-1, row)
+    return inventory_weapons_menu
 
 
 async def get_inventory_weapon_menu(user_id: int, weapon_id: int):
@@ -67,7 +67,7 @@ async def get_inventory_weapon_menu(user_id: int, weapon_id: int):
                     text="Отмена",
                     callback_data=cancel_callback.new(
                         user_id=user_id,
-                        cancel_type="equip"
+                        cancel_type="equip_weapon"
                     )
                 )
             ],

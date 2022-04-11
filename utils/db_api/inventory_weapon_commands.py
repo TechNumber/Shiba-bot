@@ -3,7 +3,7 @@ import hashlib
 from asyncpg import UniqueViolationError
 from sqlalchemy import and_
 
-from utils.db_api import weapon_commands
+from utils.db_api import weapon_commands, user_commands
 from utils.db_api.schemas.inventory_weapon import InventoryWeapon
 
 
@@ -41,15 +41,9 @@ async def discard_inventory_weapon(user_id: int,
             await inventory_weapon.update(amount=inventory_weapon.amount - 1).apply()
         else:
             await inventory_weapon.delete()
+            await user_commands.set_weapon_null(user_id=user_id)
     else:
         print("Запись не найдена")
-
-
-async def select_weapon_by_user_id(user_id: int):
-    weapon = await InventoryWeapon.query.where(
-        InventoryWeapon.user_id == user_id
-    ).gino.first()
-    return weapon
 
 
 async def select_all_weapons_by_user_id(user_id: int):
