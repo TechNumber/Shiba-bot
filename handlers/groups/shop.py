@@ -117,37 +117,3 @@ async def buy_meal(call: CallbackQuery, callback_data: dict):
         await inventory_meal_commands.add_inventory_meal(user.user_id, meal.meal_id)
         await user_commands.update_user_money(user.user_id, user.money - meal.meal_price)
     await cancel_buy(call)
-
-
-"""
-@dp.callback_query_handler(IsCalledByOwner(), text="show_shop_meals", state=GameState.shopping)
-async def show_shop_meals(call: CallbackQuery):
-    await call.message.edit_reply_markup(await get_shop_all_meals_menu())
-    await call.answer(cache_time=15)
-
-
-@dp.callback_query_handler(IsCalledByOwner(), choose_item_callback.filter(item_type="meal"), state=GameState.shopping)
-async def show_meal(call: CallbackQuery, callback_data: dict):
-    meal = await meal_commands.select_meal(int(callback_data.get("item_id")))
-    await call.message.edit_text(meal.meal_chars)
-    buy_meal_menu.inline_keyboard[0][0].callback_data = buy_item_callback.new(
-        item_type="meal",
-        item_id=meal.meal_id
-    )
-    await call.message.edit_reply_markup(buy_meal_menu)
-
-
-@dp.callback_query_handler(IsCalledByOwner(), buy_item_callback.filter(item_type="meal"), state=GameState.shopping)
-async def buy_meal(call: CallbackQuery, callback_data: dict):
-    meal = await meal_commands.select_meal(int(callback_data.get("item_id")))
-    user = await user_commands.select_user(user_id=call.from_user.id)
-    if user.money < meal.meal_price:
-        await call.answer(
-            f"Вам нужно на {meal.meal_price - user.money} монет больше, чтобы купить этот предмет",
-            cache_time=15
-        )
-    else:
-        await inventory_meal_commands.add_inventory_meal(user.user_id, meal.meal_id)
-        await user_commands.update_user_money(user.user_id, user.money - meal.meal_price)
-    await cancel_buy(call)
-"""
