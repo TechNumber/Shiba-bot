@@ -22,7 +22,22 @@ from utils.db_api import weapon_commands, outfit_commands, inventory_weapon_comm
 
 
 @dp.message_handler(Command("inventory"), state=GameState.registered)
-async def show_inventory_categories(message: types.Message, state: FSMContext):
+async def show_inventory_categories(message: types.Message):
+    """
+    Выводит сообщение с тремя кнопками: "Оружие", "Одежда", "Еда", позволяющими
+    выбрать категорию предметов инвентаря, в которую хочет перейти пользователь,
+    а также с кнопкой "Отмена".
+
+    Filters:
+        Command("inventory"): сообщение содержит команду /inventory.
+        state=GameState.registered: пользователь, вызвавший команду, участвует в игре
+
+    Args:
+        message (types.Message): Сообщение с командой /inventory
+
+    Returns:
+        None
+    """
     await message.answer("Выберите категорию предметов",
                          reply_markup=await get_home_inventory_menu(user_id=message.from_user.id))
     await GameState.inventory.set()
@@ -31,6 +46,25 @@ async def show_inventory_categories(message: types.Message, state: FSMContext):
 @dp.callback_query_handler(IsCalledByOwner(), cancel_callback.filter(cancel_type="inventory"),
                            state=GameState.inventory)
 async def cancel_inventory(call: CallbackQuery):
+    """
+    Закрывает меню инвентаря по нажатии кнопки "Отмена".
+
+    Filters:
+        IsCalledByOwner(): Кнопка, вызвавшая CallbackQuery, была нажата тем же
+        пользователем, который изначально вызвал меню инвентаря.
+        cancel_callback.filter(cancel_type="inventory"): CallbackData вызванного
+        CallbackQuery относится к типу cancel_callback, т.е. отвечает за закрытие меню.
+        Тип закрываемого меню — меню выбора категории предметов инвентаря.
+        state=GameState.inventory: пользователь, нажавший на кнопку, находится в
+        инвентаре.
+
+    Args:
+        call (CallbackQuery): CallbackQuery кнопки "Отмена", содержащий CallbackData
+        для кнопок закрытия меню.
+
+    Returns:
+        None
+    """
     await call.message.edit_reply_markup()
     await GameState.registered.set()
     await call.answer(cache_time=15)
@@ -39,6 +73,25 @@ async def cancel_inventory(call: CallbackQuery):
 @dp.callback_query_handler(IsCalledByOwner(), cancel_callback.filter(cancel_type="show"),
                            state=GameState.inventory)
 async def cancel_show_items(call: CallbackQuery):
+    """
+    Закрывает меню с кнопками предметов в инвентаре по нажатии кнопки "Отмена".
+
+    Filters:
+        IsCalledByOwner(): Кнопка, вызвавшая CallbackQuery, была нажата тем же
+        пользователем, который изначально вызвал меню инвентаря.
+        cancel_callback.filter(cancel_type="show"): CallbackData вызванного
+        CallbackQuery относится к типу cancel_callback, т.е. отвечает за закрытие меню.
+        Тип закрываемого меню — меню с кнопками предметов в инвентаре.
+        state=GameState.inventory: пользователь, нажавший на кнопку, находится в
+        инвентаре.
+
+    Args:
+        call (CallbackQuery): CallbackQuery кнопки "Отмена", содержащий CallbackData
+        для кнопок закрытия меню.
+
+    Returns:
+        None
+    """
     await call.message.edit_text("Выберите категорию предметов")
     await call.message.edit_reply_markup(await get_home_inventory_menu(user_id=call.from_user.id))
 
@@ -46,12 +99,50 @@ async def cancel_show_items(call: CallbackQuery):
 @dp.callback_query_handler(IsCalledByOwner(), cancel_callback.filter(cancel_type="equip_weapon"),
                            state=GameState.inventory)
 async def cancel_equip_weapon(call: CallbackQuery):
+    """
+    Закрывает меню экипировки оружия по нажатии кнопки "Отмена".
+
+    Filters:
+        IsCalledByOwner(): Кнопка, вызвавшая CallbackQuery, была нажата тем же
+        пользователем, который изначально вызвал меню инвентаря.
+        cancel_callback.filter(cancel_type="equip_weapon"): CallbackData вызванного
+        CallbackQuery относится к типу cancel_callback, т.е. отвечает за закрытие меню.
+        Тип закрываемого меню — меню экипировки оружия.
+        state=GameState.inventory: пользователь, нажавший на кнопку, находится в
+        инвентаре.
+
+    Args:
+        call (CallbackQuery): CallbackQuery кнопки "Отмена", содержащий CallbackData
+        для кнопок закрытия меню.
+
+    Returns:
+        None
+    """
     await show_inventory_weapons(call)
 
 
 @dp.callback_query_handler(IsCalledByOwner(), show_inventory_items_callback.filter(item_type="weapon"),
                            state=GameState.inventory)
 async def show_inventory_weapons(call: CallbackQuery):
+    """
+    Показывает меню выбора с кнопками оружия, содержащегося в инвентаре, и кнопкой "Отмена".
+
+    Filters:
+        IsCalledByOwner(): Кнопка, вызвавшая CallbackQuery, была нажата тем же
+        пользователем, который изначально вызвал меню инвентаря.
+        show_inventory_items_callback.filter(item_type="weapon"): CallbackData вызванного
+        CallbackQuery относится к типу show_inventory_items_callback, т.е. отвечает за
+        показ меню с кнопками предметов в инвентаре. Тип меню — меню выбора с кнопками оружия.
+        state=GameState.inventory: пользователь, нажавший на кнопку, находится в
+        инвентаре.
+
+    Args:
+        call (CallbackQuery): CallbackQuery кнопки "Оружие", содержащий CallbackData
+        для кнопок, открывающих меню выбора с кнопками оружия.
+
+    Returns:
+        None
+    """
     await call.message.edit_text("Выберите оружие, которое хотите экипировать")
     await call.message.edit_reply_markup(await get_inventory_all_weapons_menu(user_id=call.from_user.id))
     await call.answer(cache_time=15)
@@ -60,6 +151,27 @@ async def show_inventory_weapons(call: CallbackQuery):
 @dp.callback_query_handler(IsCalledByOwner(), show_item_callback.filter(item_type="weapon"),
                            state=GameState.inventory)
 async def show_weapon(call: CallbackQuery, callback_data: dict):
+    """
+    Показывает меню экипировки выбранного оружия с его описанием и кнопками "Экипировать"
+    и "Отмена"
+
+    Filters:
+        IsCalledByOwner(): Кнопка, вызвавшая CallbackQuery, была нажата тем же
+        пользователем, который изначально вызвал меню инвентаря.
+        show_item_callback.filter(item_type="weapon"): CallbackData вызванного
+        CallbackQuery относится к типу show_item_callback, т.е. отвечает за
+        показ меню выбранного предмета. Тип меню — меню выбранного оружия.
+        state=GameState.inventory: пользователь, нажавший на кнопку, находится в
+        инвентаре.
+
+    Args:
+        call (CallbackQuery): CallbackQuery кнопки выбранного оружия, содержащий CallbackData
+        для кнопок, открывающих меню выбранного оружия.
+        callback_data (dict): CallbackData пришедшего call
+
+    Returns:
+        None
+    """
     weapon = await weapon_commands.select_weapon(int(callback_data.get("item_id")))
     await call.message.edit_text(weapon.weapon_chars)
     await call.message.edit_reply_markup(
@@ -68,6 +180,28 @@ async def show_weapon(call: CallbackQuery, callback_data: dict):
 
 @dp.callback_query_handler(IsCalledByOwner(), equip_item_callback.filter(item_type="weapon"), state=GameState.inventory)
 async def equip_weapon(call: CallbackQuery, callback_data: dict):
+    """
+    Данный обработчик отвечает за экипировку выбранного оружия по нажатии кнопки "Экипировать".
+    Т.е. данное оружие вносится в поле weapon_id записи о пользователе, отображающее, какое
+    оружие сейчас у него в руках.
+
+    Filters:
+        IsCalledByOwner(): Кнопка, вызвавшая CallbackQuery, была нажата тем же
+        пользователем, который изначально вызвал меню инвентаря.
+        equip_item_callback.filter(item_type="weapon"): CallbackData вызванного
+        CallbackQuery относится к типу equip_item_callback, т.е. отвечает за
+        экипировку выбранного предмета. Тип экипируемого предмета — оружие.
+        state=GameState.inventory: пользователь, нажавший на кнопку, находится в
+        инвентаре.
+
+    Args:
+        call (CallbackQuery): CallbackQuery кнопки "Экипировать" выбранного оружия, содержащий
+        CallbackData для кнопок, обрабатывающих экипировку предметов.
+        callback_data (dict): CallbackData пришедшего call
+
+    Returns:
+        None
+    """
     weapon = await weapon_commands.select_weapon(int(callback_data.get("item_id")))
     user = await user_commands.select_user(user_id=call.from_user.id)
     await user_commands.update_user_weapon(user_id=user.user_id, weapon_id=weapon.weapon_id)
@@ -77,6 +211,27 @@ async def equip_weapon(call: CallbackQuery, callback_data: dict):
 @dp.callback_query_handler(IsCalledByOwner(), discard_item_callback.filter(item_type="weapon"),
                            state=GameState.inventory)
 async def discard_weapon(call: CallbackQuery, callback_data: dict):
+    """
+    Данный обработчик отвечает за удаление предмета из инвентаря по нажатии кнопки
+    "Выбросить".
+
+    Filters:
+        IsCalledByOwner(): Кнопка, вызвавшая CallbackQuery, была нажата тем же
+        пользователем, который изначально вызвал меню инвентаря.
+        discard_item_callback.filter(item_type="weapon"): CallbackData вызванного
+        CallbackQuery относится к типу discard_item_callback, т.е. отвечает за
+        удаление выбранного предмета из инвентаря. Тип удаляемого предмета — оружие.
+        state=GameState.inventory: пользователь, нажавший на кнопку, находится в
+        инвентаре.
+
+    Args:
+        call (CallbackQuery): CallbackQuery кнопки "Выбросить" выбранного оружия,
+        содержащий CallbackData для кнопок, обрабатывающих удаление предметов.
+        callback_data (dict): CallbackData пришедшего call
+
+    Returns:
+        None
+    """
     weapon = await weapon_commands.select_weapon(int(callback_data.get("item_id")))
     user = await user_commands.select_user(user_id=call.from_user.id)
     await inventory_weapon_commands.discard_inventory_weapon(user_id=user.user_id, weapon_id=weapon.weapon_id)
@@ -140,40 +295,16 @@ async def show_inventory_meals(call: CallbackQuery):
         IsCalledByOwner(): Кнопка, вызвавшая CallbackQuery, была нажата тем же
         пользователем, который изначально вызвал меню инвентаря.
         show_inventory_items_callback.filter(item_type="meal"): CallbackData вызванного
-        Callback относится к типу show_inventory_items_callback, т.е. отвечает за вывод
-        предметов инвентаря. Тип предметов — еда.
+        CallbackQuery относится к типу show_inventory_items_callback, т.е. отвечает
+        за вывод предметов инвентаря. Тип предметов — еда.
 
     Args:
-        call (CallbackQuery): Callback кнопки "еда", содержащий CallbackData
+        call (CallbackQuery): CallbackQuery кнопки "еда", содержащий CallbackData
         для кнопок отображения содержимого инвентаря определённого типа.
 
     Returns:
         None
-
     """
-    """
-    Generators have a ``Yields`` section instead of a ``Returns`` section.
-
-    Args:
-        n (int): The upper limit of the range to generate, from 0 to `n` - 1.
-
-    Yields:
-        int: The next number in the range of 0 to `n` - 1.
-
-    Examples:
-        Examples should be written in doctest format, and should illustrate how
-        to use the function.
-    """
-
-    '''
-        Returns the reversed String.
-
-        Parameters:
-            str1 (str):The string which is to be reversed.
-
-        Returns:
-            reverse(str1):The string which gets reversed.   
-        '''
     await call.message.edit_text("Выберите, чем хотите подкрепиться")
     await call.message.edit_reply_markup(await get_inventory_all_meals_menu(user_id=call.from_user.id))
     await call.answer(cache_time=15)

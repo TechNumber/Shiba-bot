@@ -5,6 +5,21 @@ from keyboards.inline.callback_datas import show_inventory_items_callback, cance
 
 
 async def get_home_inventory_menu(user_id: int):
+    """
+    Данный обработчик формирует и возвращает меню с кнопками "Оружие", "Одежда",
+    "Еда", "Отмена", при помощи которого пользователь выбирает категорию предметов
+    в инвентаре, которые хочет посмотреть.
+
+    Args:
+        user_id (int): id пользователя; оно помещается в CallbackData каждой кнопки
+        для последующей проверки фильтром IsCalledByOwner(). Благодаря этому
+        нажатие других пользователей на кнопки, предназначенные для данного пользователя,
+        не будут обрабатываться.
+
+    Returns:
+        (InlineKeyboardMarkup): Меню выбора категории предметов инвентаря
+
+    """
     home_inventory_menu = InlineKeyboardMarkup(
         row_width=3,
         inline_keyboard=[

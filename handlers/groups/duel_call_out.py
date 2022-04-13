@@ -2,12 +2,25 @@ from aiogram import types
 from aiogram.dispatcher.filters import Command, StateFilter
 
 from states.game_state import GameState
-from utils.db_api import user_commands
+from utils.db_api import user_commands, duel_commands
 from loader import dp, bot
 
 
 @dp.message_handler(Command("duel"), state=GameState.registered)
 async def duel_call_out(message: types.Message):
+    """
+    Данный обработчик формирует сообщение, которое упоминает получателя запроса
+    на дуэль и сообщает ему, кем он был вызван на дуэль. Затем запись о
+    дуэли вносится в таблицу дуэлей, чтобы пользователи затем могли посмотреть,
+    с кем у них намечено сражение, и принять его.
+
+    Args:
+        message (types.Message): сообщение, содержащее команду /duel и упоминание
+        пользователя, который вызывается на дуэль
+
+    Returns:
+        None
+    """
     user_id_list = await user_commands.get_all_users_id()
     blocks = message.md_text.strip().split()
     if message.from_user.username is not None:
@@ -32,6 +45,7 @@ async def duel_call_out(message: types.Message):
             await message.answer(
                 f"{user_mention}, ты был вызван на дуэль шибой {sender_shiba_name} пользователя {sender_link}! Ты можешь принять или отклонить вызов на дуэль, нажав на кнопку \"Дуэли\" в меню шибы.",
                 disable_web_page_preview=True)
+            await duel_commands.add_duel(sender_id=message.from_user.id, receiver_id=user_id_list[i - 1])
     elif len(blocks) > 1 and "tg://user?id=" in blocks[1]:
         id_from_message = int(blocks[1][blocks[1].index("tg://user?id=") +
                                         len("tg://user?id="):
@@ -45,5 +59,6 @@ async def duel_call_out(message: types.Message):
             await message.answer(
                 f"<a href=\"tg://user?id={id_from_message}\">{receiver_name}</a>, ты был вызван на дуэль шибой {sender_shiba_name} пользователя {sender_link}! Ты можешь принять или отклонить вызов на дуэль, нажав на кнопку \"Дуэли\" в меню шибы.",
                 disable_web_page_preview=True)
+            await duel_commands.add_duel(sender_id=message.from_user.id, receiver_id=id_from_message)
     else:
         await message.answer("Вы неверно указали пользователя, с которым хотите драться!")
