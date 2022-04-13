@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.builtin import Command
@@ -130,6 +132,48 @@ async def cancel_eat_meal(call: CallbackQuery):
 @dp.callback_query_handler(IsCalledByOwner(), show_inventory_items_callback.filter(item_type="meal"),
                            state=GameState.inventory)
 async def show_inventory_meals(call: CallbackQuery):
+    """
+    Выводит меню из кнопок, позволяющих выбрать блюдо из тех, что находятся в данный
+    момент в инвентаре у пользователя.
+
+    Filters:
+        IsCalledByOwner(): Кнопка, вызвавшая CallbackQuery, была нажата тем же
+        пользователем, который изначально вызвал меню инвентаря.
+        show_inventory_items_callback.filter(item_type="meal"): CallbackData вызванного
+        Callback относится к типу show_inventory_items_callback, т.е. отвечает за вывод
+        предметов инвентаря. Тип предметов — еда.
+
+    Args:
+        call (CallbackQuery): Callback кнопки "еда", содержащий CallbackData
+        для кнопок отображения содержимого инвентаря определённого типа.
+
+    Returns:
+        None
+
+    """
+    """
+    Generators have a ``Yields`` section instead of a ``Returns`` section.
+
+    Args:
+        n (int): The upper limit of the range to generate, from 0 to `n` - 1.
+
+    Yields:
+        int: The next number in the range of 0 to `n` - 1.
+
+    Examples:
+        Examples should be written in doctest format, and should illustrate how
+        to use the function.
+    """
+
+    '''
+        Returns the reversed String.
+
+        Parameters:
+            str1 (str):The string which is to be reversed.
+
+        Returns:
+            reverse(str1):The string which gets reversed.   
+        '''
     await call.message.edit_text("Выберите, чем хотите подкрепиться")
     await call.message.edit_reply_markup(await get_inventory_all_meals_menu(user_id=call.from_user.id))
     await call.answer(cache_time=15)
@@ -148,9 +192,12 @@ async def show_meal(call: CallbackQuery, callback_data: dict):
 async def eat_meal(call: CallbackQuery, callback_data: dict):
     meal = await meal_commands.select_meal(int(callback_data.get("item_id")))
     user = await user_commands.select_user(user_id=call.from_user.id)
-    # TODO: apply_effects
-    await inventory_meal_commands.discard_inventory_meal(user_id=user.user_id, meal_id=meal.meal_id)
-    await show_inventory_meals(call)
+    tasks = [
+        meal_commands.apply_meal_effects(user_id=user.user_id, meal_id=meal.meal_id),
+        inventory_meal_commands.discard_inventory_meal(user_id=user.user_id, meal_id=meal.meal_id),
+        show_inventory_meals(call)
+    ]
+    await asyncio.gather(*tasks)
 
 
 @dp.callback_query_handler(IsCalledByOwner(), discard_item_callback.filter(item_type="meal"),

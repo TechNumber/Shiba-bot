@@ -29,7 +29,7 @@ async def meal_init():
     await meal_commands.add_meal(
         meal_id=1,
         meal_name="Сухой корм",
-        meal_price=25,
+        meal_price=0,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -45,7 +45,7 @@ async def meal_init():
     await meal_commands.add_meal(
         meal_id=2,
         meal_name="Говяжья кость",
-        meal_price=70,
+        meal_price=0,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -54,14 +54,14 @@ async def meal_init():
         health_time=0,
         health_add=30,
         health_mpy=1,
-        strength_time=5,
+        strength_time=0.16,
         strength_add=0,
         strength_mpy=1.2
     )
     await meal_commands.add_meal(
         meal_id=3,
         meal_name="Листик мяты",
-        meal_price=250,
+        meal_price=0,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -77,7 +77,7 @@ async def meal_init():
     await meal_commands.add_meal(
         meal_id=4,
         meal_name="Утиная грудка",
-        meal_price=200,
+        meal_price=0,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -93,7 +93,7 @@ async def meal_init():
     await meal_commands.add_meal(
         meal_id=5,
         meal_name="Каре ягненка",
-        meal_price=200,
+        meal_price=0,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -102,14 +102,14 @@ async def meal_init():
         health_time=0,
         health_add=0,
         health_mpy=1,
-        strength_time=5,
+        strength_time=1,
         strength_add=0,
         strength_mpy=2
     )
     await meal_commands.add_meal(
         meal_id=6,
         meal_name="Черная икра",
-        meal_price=1000,
+        meal_price=0,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -125,7 +125,7 @@ async def meal_init():
     await meal_commands.add_meal(
         meal_id=7,
         meal_name="Фуа-гра",
-        meal_price=10000,
+        meal_price=0,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -145,3 +145,13 @@ async def meal_init():
 # loop = asyncio.get_event_loop()
 # loop.run_until_complete(meal_init())
 # ----------------------------------------------------------------------------
+
+"""
+25
+70
+250
+200
+200
+1000
+10000
+"""

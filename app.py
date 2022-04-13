@@ -23,41 +23,41 @@ async def on_startup(dispatcher):
     print("Чистим базу")
     # await db.gino.drop_all()
 
-    # try:
-    #     await Duel.__table__.gino.drop()
-    # except UndefinedTableError:
-    #     pass
-    # try:
-    #     await InventoryWeapon.__table__.gino.drop()
-    # except UndefinedTableError:
-    #     pass
-    # try:
-    #     await InventoryOutfit.__table__.gino.drop()
-    # except UndefinedTableError:
-    #     pass
-    # try:
-    #     await InventoryMeal.__table__.gino.drop()
-    # except UndefinedTableError:
-    #     pass
-    # try:
-    #     await User.__table__.gino.drop()
-    # except UndefinedTableError:
-    #     pass
+    try:
+        await Duel.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    try:
+        await InventoryWeapon.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    try:
+        await InventoryOutfit.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    try:
+        await InventoryMeal.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    try:
+        await User.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
 
     print("Готово")
 
     print("Инициализируем таблицы предметов")
-    # await all_init.all_init()
+    await all_init.all_init()
     print("Готово")
 
     print("Создаём таблицы")
     # await db.gino.create_all()
 
-    # await User.__table__.gino.create()
-    # await InventoryOutfit.__table__.gino.create()
-    # await InventoryWeapon.__table__.gino.create()
-    # await InventoryMeal.__table__.gino.create()
-    # await Duel.__table__.gino.create()
+    await User.__table__.gino.create()
+    await InventoryOutfit.__table__.gino.create()
+    await InventoryWeapon.__table__.gino.create()
+    await InventoryMeal.__table__.gino.create()
+    await Duel.__table__.gino.create()
 
     print("Готово")
 

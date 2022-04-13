@@ -1,7 +1,10 @@
+import asyncio
+import math
 from decimal import Decimal
 
 from asyncpg import UniqueViolationError
 
+from utils.db_api import user_commands
 from utils.db_api.schemas.meal import Meal
 
 
@@ -10,13 +13,13 @@ async def add_meal(meal_id: int,
                    meal_price: int,
                    meal_description: str,
                    meal_chars: str,
-                   max_health_time: int,
+                   max_health_time: float,
                    max_health_add: int,
                    max_health_mpy: float,
-                   health_time: int,
+                   health_time: float,
                    health_add: int,
                    health_mpy: float,
-                   strength_time: int,
+                   strength_time: float,
                    strength_add: int,
                    strength_mpy: float):
     try:
@@ -92,3 +95,80 @@ async def generate_all_meals_chars():
                 ) if meal.strength_mpy != 1 else ''
             ])
         ).apply()
+
+
+# TODO: чтобы не возникало коллизий, можно сделать так,
+#  чтобы нельзя было есть пищу, пока игрок находится под эффектом предыдущей пищи
+
+async def increase_max_health(user_id: int, meal):
+    user = await user_commands.select_user(user_id=user_id)
+    await user.update(max_health=math.ceil(user.max_health * meal.max_health_mpy + meal.max_health_add)).apply()
+    print(f"Получил пользователя: {user}")
+
+
+async def delay_max_health(user_id, meal):
+    user = await user_commands.select_user(user_id=user_id)
+    await asyncio.sleep(meal.max_health_time * 60)
+    await user.update(max_health=math.ceil(user.max_health / meal.max_health_mpy - meal.max_health_add)).apply()
+    print(f"Получил пользователя: {user}")
+
+
+async def increase_health(user_id: int, meal):
+    user = await user_commands.select_user(user_id=user_id)
+    # TODO: здоровье после увеличения не может превышать максимальное.
+    #  Но это затруднит возвращение здоровья к исходному значению
+    await user.update(health=math.ceil(user.health * meal.health_mpy + meal.health_add)).apply()
+    print(f"Получил пользователя: {user}")
+
+
+async def delay_health(user_id, meal):
+    user = await user_commands.select_user(user_id=user_id)
+    await asyncio.sleep(meal.health_time * 60)
+    await user.update(health=math.ceil(user.health / meal.health_mpy - meal.health_add)).apply()
+    print(f"Получил пользователя: {user}")
+
+
+async def increase_strength(user_id: int, meal):
+    user = await user_commands.select_user(user_id=user_id)
+    await user.update(strength=math.ceil(user.strength * meal.strength_mpy + meal.strength_add)).apply()
+    print(f"Получил пользователя: {user}")
+
+
+async def delay_strength(user_id, meal):
+    user = await user_commands.select_user(user_id=user_id)
+    await asyncio.sleep(meal.strength_time * 60)
+    await user.update(strength=math.ceil(user.strength / meal.strength_mpy - meal.strength_add)).apply()
+    print(f"Получил пользователя: {user}")
+
+
+async def apply_meal_effects(user_id: int, meal_id: int):
+    user = await user_commands.select_user(user_id=user_id)
+    meal = await select_meal(meal_id=meal_id)
+    if meal.max_health_time != 0:
+        tasks = [
+            increase_max_health(user_id, meal),
+            delay_max_health(user_id, meal)
+        ]
+        await asyncio.gather(*tasks)
+    else:
+        await user.update(max_health=math.ceil(user.max_health * meal.max_health_mpy + meal.max_health_add)).apply()
+    if meal.health_mpy == -1:
+        await user.update(health=user.max_health).apply()
+    elif meal.health_time != 0:
+        tasks = [
+            increase_health(user_id, meal),
+            delay_health(user_id, meal)
+        ]
+        await asyncio.gather(*tasks)
+    else:
+        await user.update(health=math.ceil(user.health * meal.health_mpy + meal.health_add)).apply()
+
+    if meal.strength_time != 0:
+        tasks = [
+            increase_strength(user_id, meal),
+            delay_strength(user_id, meal)
+        ]
+        await asyncio.gather(*tasks)
+    else:
+        await user.update(strength=math.ceil(user.strength * meal.strength_mpy + meal.strength_add)).apply()
+# TODO: показатель не может упасть ниже нуля
