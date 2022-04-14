@@ -11,21 +11,24 @@ from utils.db_api.schemas.outfit import Outfit
 
 
 async def outfit_init():
+    """
+    Данная функция инициализирует записи в таблице предметов одежды.
+
+    Returns:
+        None
+    """
     # ----------------------------------------------------------------------------
     # Для создания исключительно этой таблицы при запуске конкретно из этого файла
+    # (для этого также необходимо раскомментировать две нижние строчки файла)
     # await db.set_bind(config.POSTGRES_URI)
-    # await db.gino.drop_all()
-    # await db.gino.create_all()
     # ----------------------------------------------------------------------------
 
-    # ------------------------------------
-    # Для версии без внешних ключей
     try:
         await Outfit.__table__.gino.drop()
     except UndefinedTableError:
         pass
     await Outfit.__table__.gino.create()
-    # ------------------------------------
+
     await outfit_commands.add_outfit(
         outfit_id=1,
         outfit_name="Ошейник",

@@ -8,6 +8,19 @@ from utils.db_api import inventory_weapon_commands
 
 
 async def get_inventory_all_weapons_menu(user_id: int):
+    """
+    Данная функция формирует и возвращает меню из кнопок, позволяющее выбрать
+    оружие, находящееся в инвентаре.
+
+    Args:
+        user_id (int): id пользователя; оно помещается в CallbackData каждой кнопки
+        для последующей проверки фильтром IsCalledByOwner(). Благодаря этому
+        нажатие других пользователей на кнопки, предназначенные для данного пользователя,
+        не будут обрабатываться.
+
+    Returns:
+        (InlineKeyboardMarkup): Меню выбора оружия из инвентаря.
+    """
     inventory_weapons_menu = InlineKeyboardMarkup(
         row_width=2,
         inline_keyboard=[
@@ -42,6 +55,21 @@ async def get_inventory_all_weapons_menu(user_id: int):
 
 
 async def get_inventory_weapon_menu(user_id: int, weapon_id: int):
+    """
+    Данная функция формирует и возвращает меню выбранного оружия с кнопками
+    "Экипировать", "Выбросить", "Отмена".
+
+    Args:
+        user_id (int): id пользователя; оно помещается в CallbackData каждой кнопки
+        для последующей проверки фильтром IsCalledByOwner(). Благодаря этому
+        нажатие других пользователей на кнопки, предназначенные для данного пользователя,
+        не будут обрабатываться.
+        weapon_id (int): id выбранного оружия; по нему будет осуществляться извлечение
+        оружия и его характеристик из БД.
+
+    Returns:
+        (InlineKeyboardMarkup): Меню выбранного оружия.
+    """
     equip_weapon_menu = InlineKeyboardMarkup(
         row_width=2,
         inline_keyboard=[

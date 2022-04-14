@@ -1,3 +1,11 @@
+"""
+В данном файле создаются экземпляры CallbackData(), которые передаются в качестве
+CallbackData кнопок. Каждый экземпляр отвечает за свой тип кнопок и обладает
+набором соответствующих полей для передачи информации внутри вызываемого кнопкой
+CallbackQuery. В качестве данных CallbackQuery можно использовать строковые литералы,
+но в этом случае возможны опечатки и путаница из-за отсутствия унификации.
+"""
+
 from aiogram.utils.callback_data import CallbackData
 
 show_item_callback = CallbackData("show_item", "user_id", "item_type", "item_id")

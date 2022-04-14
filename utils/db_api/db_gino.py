@@ -27,6 +27,13 @@ class BaseModel(db.Model):
 
 
 class TimedBaseModel(BaseModel):
+    """
+    Является базовым абстрактным классом для всех таблиц в проекте.
+
+    Columns:
+         created_at (int): Дата и время создания записи в таблице.
+         updated_at (int): Дата и время редактирования записи в таблице.
+    """
     __abstract__ = True
 
     created_at = Column(DateTime(True), server_default=db.func.now())  # server_default — значение по умолчанию, kwargs

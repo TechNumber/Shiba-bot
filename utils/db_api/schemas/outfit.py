@@ -5,6 +5,22 @@ from utils.db_api.db_gino import TimedBaseModel
 
 
 class Outfit(TimedBaseModel):
+    """
+    Таблица, хранящая присутствующие в игре предметы одежды.
+
+    Columns:
+        outfit_id (int, PK): ID записи о предмете одежды.
+        outfit_name (str): Название предмета одежды.
+        outfit_price (str): Стоимость предмета одежды.
+        outfit_description (str): Словесное описание предмета одежды.
+        outfit_chars (str): Список эффектов предмета одежды.
+        health_add (int): На сколько единиц увеличивается текущее здоровье.
+        health_mpy (float): Во сколько раз увеличивается текущее здоровье.
+        agility_add (int): На сколько единиц увеличивается ловкость.
+        agility_mpy (float): Во сколько раз увеличивается ловкость.
+        strength_add (int): На сколько единиц увеличивается сила.
+        strength_mpy (float): Во сколько раз увеличивается сила.
+    """
     __tablename__ = 'outfits'
     outfit_id = Column(Integer, primary_key=True)
 

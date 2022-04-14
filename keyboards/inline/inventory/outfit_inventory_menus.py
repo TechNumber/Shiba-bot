@@ -8,6 +8,19 @@ from utils.db_api import inventory_outfit_commands
 
 
 async def get_inventory_all_outfits_menu(user_id: int):
+    """
+    Данная функция формирует и возвращает меню из кнопок, позволяющее выбрать
+    один из предметов одежды, находящихся в инвентаре.
+
+    Args:
+        user_id (int): id пользователя; оно помещается в CallbackData каждой кнопки
+        для последующей проверки фильтром IsCalledByOwner(). Благодаря этому
+        нажатие других пользователей на кнопки, предназначенные для данного пользователя,
+        не будут обрабатываться.
+
+    Returns:
+        (InlineKeyboardMarkup): Меню выбора предмета одежды из инвентаря.
+    """
     inventory_outfits_menu = InlineKeyboardMarkup(
         row_width=2,
         inline_keyboard=[
@@ -42,6 +55,21 @@ async def get_inventory_all_outfits_menu(user_id: int):
 
 
 async def get_inventory_outfit_menu(user_id: int, outfit_id: int):
+    """
+    Данная функция формирует и возвращает меню выбранного предмета одежды с кнопками
+    "Надеть", "Выбросить", "Отмена".
+
+    Args:
+        user_id (int): id пользователя; оно помещается в CallbackData каждой кнопки
+        для последующей проверки фильтром IsCalledByOwner(). Благодаря этому
+        нажатие других пользователей на кнопки, предназначенные для данного пользователя,
+        не будут обрабатываться.
+        outfit_id (int): id выбранного предмета одежды; по нему будет осуществляться
+        извлечение предмета одежды и его характеристик из БД.
+
+    Returns:
+        (InlineKeyboardMarkup): Меню выбранного предмета одежды.
+    """
     equip_outfit_menu = InlineKeyboardMarkup(
         row_width=2,
         inline_keyboard=[

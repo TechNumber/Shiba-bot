@@ -8,6 +8,19 @@ from utils.db_api import meal_commands
 
 
 async def get_shop_all_meals_menu(user_id: int):
+    """
+    Данная функция формирует и возвращает меню из кнопок, позволяющее выбрать
+    одно из блюд, продающихся в магазине.
+
+    Args:
+        user_id (int): id пользователя; оно помещается в CallbackData каждой кнопки
+        для последующей проверки фильтром IsCalledByOwner(). Благодаря этому
+        нажатие других пользователей на кнопки, предназначенные для данного пользователя,
+        не будут обрабатываться.
+
+    Returns:
+        (InlineKeyboardMarkup): Меню выбора блюда в магазине.
+    """
     show_meals_menu = InlineKeyboardMarkup(
         row_width=2,
         inline_keyboard=[
@@ -46,6 +59,21 @@ async def get_shop_all_meals_menu(user_id: int):
 
 
 async def get_shop_meal_menu(user_id: int, meal_id: int):
+    """
+    Данная функция формирует и возвращает меню выбранного блюда с кнопками
+    "Купить", "Выбросить", "Отмена".
+
+    Args:
+        user_id (int): id пользователя; оно помещается в CallbackData каждой кнопки
+        для последующей проверки фильтром IsCalledByOwner(). Благодаря этому
+        нажатие других пользователей на кнопки, предназначенные для данного пользователя,
+        не будут обрабатываться.
+        meal_id (int): id выбранного блюда; по нему будет осуществляться извлечение
+        блюда и его характеристик из БД.
+
+    Returns:
+        (InlineKeyboardMarkup): Меню выбранного блюда.
+    """
     meal_menu = InlineKeyboardMarkup(
         row_width=2,
         inline_keyboard=[

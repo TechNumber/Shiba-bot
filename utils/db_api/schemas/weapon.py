@@ -5,6 +5,21 @@ from utils.db_api.db_gino import TimedBaseModel
 
 
 class Weapon(TimedBaseModel):
+    """
+    Таблица, хранящая присутствующее в игре оружие.
+
+    Columns:
+        weapon_id (int, PK): ID записи об оружии.
+        weapon_name (str): Название оружия.
+        weapon_price (str): Стоимость оружия.
+        weapon_description (str): Словесное описание оружия.
+        weapon_chars (str): Список эффектов оружия.
+        damage (int): Количество наносимого урона.
+        health_add (int): На сколько единиц увеличивается текущее здоровье.
+        health_mpy (float): Во сколько раз увеличивается текущее здоровье.
+        agility_add (int): На сколько единиц увеличивается ловкость.
+        agility_mpy (float): Во сколько раз увеличивается ловкость.
+    """
     __tablename__ = 'weapons'
     weapon_id = Column(Integer, primary_key=True)
 

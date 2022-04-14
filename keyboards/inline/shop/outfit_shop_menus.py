@@ -1,6 +1,6 @@
 import math
 
-from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from keyboards.inline.callback_datas import cancel_callback, show_shop_items_callback, show_item_callback, \
     buy_item_callback
@@ -8,6 +8,19 @@ from utils.db_api import outfit_commands
 
 
 async def get_shop_all_outfits_menu(user_id: int):
+    """
+    Данная функция формирует и возвращает меню из кнопок, позволяющее выбрать
+    один из предметов одежды, продающихся в магазине.
+
+    Args:
+        user_id (int): id пользователя; оно помещается в CallbackData каждой кнопки
+        для последующей проверки фильтром IsCalledByOwner(). Благодаря этому
+        нажатие других пользователей на кнопки, предназначенные для данного пользователя,
+        не будут обрабатываться.
+
+    Returns:
+        (InlineKeyboardMarkup): Меню выбора блюда одежды в магазине.
+    """
     shop_outfits_menu = InlineKeyboardMarkup(
         row_width=2,
         inline_keyboard=[
@@ -53,6 +66,21 @@ async def get_shop_all_outfits_menu(user_id: int):
 
 
 async def get_shop_outfit_menu(user_id: int, outfit_id: int):
+    """
+    Данная функция формирует и возвращает меню выбранного предмета одежды с кнопками
+    "Купить", "Выбросить", "Отмена".
+
+    Args:
+        user_id (int): id пользователя; оно помещается в CallbackData каждой кнопки
+        для последующей проверки фильтром IsCalledByOwner(). Благодаря этому
+        нажатие других пользователей на кнопки, предназначенные для данного пользователя,
+        не будут обрабатываться.
+        outfit_id (int): id выбранного предмета одежды; по нему будет осуществляться
+        извлечение предмета одежды и его характеристик из БД.
+
+    Returns:
+        (InlineKeyboardMarkup): Меню выбранного предмета одежды.
+    """
     outfit_menu = InlineKeyboardMarkup(
         row_width=2,
         inline_keyboard=[
