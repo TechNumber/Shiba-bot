@@ -97,9 +97,14 @@ async def generate_all_meals_chars():
         ).apply()
 
 
-# TODO: чтобы не возникало коллизий, можно сделать так,
-#  чтобы нельзя было есть пищу, пока игрок находится под эффектом предыдущей пищи
-
+# --------------------------------------------------------------------------------
+# Ниже расположена старая версия функции apply_meal_effects, работающая с временем
+# (asyncio.sleep). Все функции increase_effect и delay_effect закомментированы,
+# поскольку они непосредственно изменяют показатели пользователя в БД, от чего
+# мы отказываемся в реализации со счётчиком дуэлей и обособленными коэффициентами
+# умножения и добавления.
+# --------------------------------------------------------------------------------
+"""
 async def increase_max_health(user_id: int, meal):
     user = await user_commands.select_user(user_id=user_id)
     await user.update(max_health=math.ceil(user.max_health * meal.max_health_mpy + meal.max_health_add)).apply()
@@ -116,7 +121,9 @@ async def delay_max_health(user_id, meal):
 async def increase_health(user_id: int, meal):
     user = await user_commands.select_user(user_id=user_id)
     # TODO: здоровье после увеличения не может превышать максимальное.
-    #  Но это затруднит возвращение здоровья к исходному значению
+    #  Но это затруднит возвращение здоровья к исходному значению после окончания действия эффекта.
+    #  Поэтому лучше обрабатывать этот случай где-то в функции, которая отвечает за расчёт здоровья
+    #  в бою, а не в БД. If'ом каким-нибудь.
     await user.update(health=math.ceil(user.health * meal.health_mpy + meal.health_add)).apply()
     print(f"Получил пользователя: {user}")
 
@@ -139,8 +146,9 @@ async def delay_strength(user_id, meal):
     await asyncio.sleep(meal.strength_time * 60)
     await user.update(strength=math.ceil(user.strength / meal.strength_mpy - meal.strength_add)).apply()
     print(f"Получил пользователя: {user}")
+"""
 
-
+"""
 async def apply_meal_effects(user_id: int, meal_id: int):
     user = await user_commands.select_user(user_id=user_id)
     meal = await select_meal(meal_id=meal_id)
@@ -171,4 +179,5 @@ async def apply_meal_effects(user_id: int, meal_id: int):
         await asyncio.gather(*tasks)
     else:
         await user.update(strength=math.ceil(user.strength * meal.strength_mpy + meal.strength_add)).apply()
+"""
 # TODO: показатель не может упасть ниже нуля
