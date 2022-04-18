@@ -29,7 +29,8 @@ class Meal(TimedBaseModel):
 
     inventory_meals = relationship("InventoryMeal", backref=backref("meals", cascade='delete'),
                                    passive_deletes=True)
-
+    effects = relationship("Meal", backref=backref("effects", cascade='delete'),
+                           passive_deletes=True)
     meal_id = Column(Integer, primary_key=True)
     meal_name = Column(String(100))  # Название
     meal_price = Column(Integer)  # Стоимость
