@@ -73,3 +73,10 @@ async def set_outfit_null(user_id):
 async def get_all_users_id():
     user_id_list = await User.query.gino.load(User.user_id).all()
     return user_id_list
+
+
+async def combat_sequence(id1, id2):
+    user1 = await select_user(id1)
+    user1 = await select_user(id2)
+    victor_id = 0
+    return victor_id

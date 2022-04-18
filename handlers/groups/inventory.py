@@ -15,7 +15,7 @@ from keyboards.inline.inventory.weapon_inventory_menus import get_inventory_all_
 from loader import dp
 from states.game_state import GameState
 from utils.db_api import weapon_commands, outfit_commands, inventory_weapon_commands, user_commands, \
-    inventory_outfit_commands, meal_commands, inventory_meal_commands
+    inventory_outfit_commands, meal_commands, inventory_meal_commands, effect_commands
 
 
 # TODO: только пользователь, вызвавший инвентарь, может выполнять в нём действия
@@ -325,6 +325,7 @@ async def eat_meal(call: CallbackQuery, callback_data: dict):
     user = await user_commands.select_user(user_id=call.from_user.id)
     tasks = [
         # effect_commands.apply_meal_effects(user_id=user.user_id, meal_id=meal.meal_id),
+        effect_commands.add_effect(user_id=user.user_id, meal_id=meal.meal_id),
         inventory_meal_commands.discard_inventory_meal(user_id=user.user_id, meal_id=meal.meal_id),
         show_inventory_meals(call)
     ]
