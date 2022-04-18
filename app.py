@@ -12,6 +12,7 @@ from utils.db_api import db_gino
 from utils.db_api import all_init
 from utils.db_api.schemas.user import User
 from utils.db_api.schemas.duel import Duel
+from utils.db_api.schemas.effect import Effect
 from utils.db_api.schemas.inventory_weapon import InventoryWeapon
 
 
@@ -25,6 +26,10 @@ async def on_startup(dispatcher):
 
     try:
         await Duel.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    try:
+        await Effect.__table__.gino.drop()
     except UndefinedTableError:
         pass
     try:
@@ -57,6 +62,7 @@ async def on_startup(dispatcher):
     await InventoryOutfit.__table__.gino.create()
     await InventoryWeapon.__table__.gino.create()
     await InventoryMeal.__table__.gino.create()
+    await Effect.__table__.gino.create()
     await Duel.__table__.gino.create()
 
     print("Готово")

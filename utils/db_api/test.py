@@ -3,14 +3,16 @@ import asyncio
 from asyncpg import UndefinedTableError
 
 from data import config
-from utils.db_api import user_commands, all_init, duel_commands, inventory_outfit_commands
+from utils.db_api import user_commands, all_init, duel_commands, inventory_outfit_commands, effect_commands
 from utils.db_api.db_gino import db
+from utils.db_api.meal_commands import select_meal
 from utils.db_api.schemas.duel import Duel
 from utils.db_api.schemas.inventory_meal import InventoryMeal
 from utils.db_api.schemas.inventory_outfit import InventoryOutfit
 from utils.db_api.schemas.user import User
 from utils.db_api.schemas.weapon import Weapon
 from utils.db_api.schemas.inventory_weapon import InventoryWeapon
+from utils.db_api.schemas.effect import Effect
 from utils.db_api import inventory_weapon_commands
 
 
@@ -18,6 +20,10 @@ async def test():
     await db.set_bind(config.POSTGRES_URI)
     try:
         await Duel.__table__.gino.drop()
+    except UndefinedTableError:
+        pass
+    try:
+        await Effect.__table__.gino.drop()
     except UndefinedTableError:
         pass
     try:
@@ -41,6 +47,7 @@ async def test():
     await InventoryOutfit.__table__.gino.create()
     await InventoryWeapon.__table__.gino.create()
     await InventoryMeal.__table__.gino.create()
+    await Effect.__table__.gino.create()
     await Duel.__table__.gino.create()
     print("Добавляем пользователей")
     await user_commands.add_user(1, "One", "email")
@@ -110,6 +117,12 @@ async def test():
 
     user = await User.query.where(User.user_id == 6).gino.first()
     await user.delete()
+
+    meal = await select_meal(meal_id=5)
+    await effect_commands.add_effect(user_id=7, meal=meal)
+    await effect_commands.add_effect(user_id=7, meal=meal)
+    await effect_commands.add_effect(user_id=7, meal=meal)
+    await effect_commands.reduce_duration(user_id=7)
 
     print()
 

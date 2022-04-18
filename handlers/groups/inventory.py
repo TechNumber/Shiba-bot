@@ -323,13 +323,9 @@ async def show_meal(call: CallbackQuery, callback_data: dict):
 async def eat_meal(call: CallbackQuery, callback_data: dict):
     meal = await meal_commands.select_meal(int(callback_data.get("item_id")))
     user = await user_commands.select_user(user_id=call.from_user.id)
-    tasks = [
-        # effect_commands.apply_meal_effects(user_id=user.user_id, meal_id=meal.meal_id),
-        effect_commands.add_effect(user_id=user.user_id, meal_id=meal.meal_id),
-        inventory_meal_commands.discard_inventory_meal(user_id=user.user_id, meal_id=meal.meal_id),
-        show_inventory_meals(call)
-    ]
-    await asyncio.gather(*tasks)
+    await effect_commands.add_effect(user_id=user.user_id, meal_id=meal.meal_id),
+    await inventory_meal_commands.discard_inventory_meal(user_id=user.user_id, meal=meal),
+    await show_inventory_meals(call)
 
 
 @dp.callback_query_handler(IsCalledByOwner(), discard_item_callback.filter(item_type="meal"),

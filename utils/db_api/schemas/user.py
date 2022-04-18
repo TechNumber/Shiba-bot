@@ -42,7 +42,7 @@ class User(TimedBaseModel):
                                    passive_deletes=True)
     duels = relationship("Duel", backref=backref("users", cascade='delete'),
                          passive_deletes=True)
-    effects = relationship("User", backref=backref("effects", cascade='delete'),
+    effects = relationship("Effect", backref=backref("users", cascade='delete'),
                            passive_deletes=True)
     user_id = Column(BigInteger, primary_key=True)
     user_name = Column(String(100))

@@ -43,7 +43,10 @@ async def meal_init():
         health_mpy=1,
         strength_time=0,
         strength_add=0,
-        strength_mpy=1
+        strength_mpy=1,
+        agility_time=0,
+        agility_add=0,
+        agility_mpy=0
     )
     await meal_commands.add_meal(
         meal_id=2,
@@ -57,9 +60,12 @@ async def meal_init():
         health_time=0,
         health_add=30,
         health_mpy=1,
-        strength_time=0.16,
+        strength_time=5,
         strength_add=0,
-        strength_mpy=1.2
+        strength_mpy=1.2,
+        agility_time=0,
+        agility_add=0,
+        agility_mpy=0
     )
     await meal_commands.add_meal(
         meal_id=3,
@@ -75,7 +81,10 @@ async def meal_init():
         health_mpy=1,
         strength_time=0,
         strength_add=0,
-        strength_mpy=1.5
+        strength_mpy=1.5,
+        agility_time=0,
+        agility_add=0,
+        agility_mpy=0
     )
     await meal_commands.add_meal(
         meal_id=4,
@@ -91,7 +100,10 @@ async def meal_init():
         health_mpy=1,
         strength_time=0,
         strength_add=0,
-        strength_mpy=1
+        strength_mpy=1,
+        agility_time=0,
+        agility_add=0,
+        agility_mpy=0
     )
     await meal_commands.add_meal(
         meal_id=5,
@@ -105,9 +117,12 @@ async def meal_init():
         health_time=0,
         health_add=0,
         health_mpy=1,
-        strength_time=1,
+        strength_time=5,
         strength_add=0,
-        strength_mpy=2
+        strength_mpy=2,
+        agility_time=0,
+        agility_add=0,
+        agility_mpy=0
     )
     await meal_commands.add_meal(
         meal_id=6,
@@ -123,7 +138,10 @@ async def meal_init():
         health_mpy=-1,  # коэффициент умножения -1 == полное восстановление здоровья
         strength_time=0,
         strength_add=0,
-        strength_mpy=3
+        strength_mpy=3,
+        agility_time=0,
+        agility_add=0,
+        agility_mpy=0
     )
     await meal_commands.add_meal(
         meal_id=7,
@@ -139,7 +157,10 @@ async def meal_init():
         health_mpy=1,
         strength_time=0,
         strength_add=0,
-        strength_mpy=1
+        strength_mpy=1,
+        agility_time=0,
+        agility_add=0,
+        agility_mpy=0
     )
     await meal_commands.generate_all_meals_chars()
 

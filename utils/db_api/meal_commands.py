@@ -13,15 +13,19 @@ async def add_meal(meal_id: int,
                    meal_price: int,
                    meal_description: str,
                    meal_chars: str,
-                   max_health_time: float,
+                   max_health_time: int,
                    max_health_add: int,
                    max_health_mpy: float,
-                   health_time: float,
+                   health_time: int,
                    health_add: int,
                    health_mpy: float,
-                   strength_time: float,
+                   strength_time: int,
                    strength_add: int,
-                   strength_mpy: float):
+                   strength_mpy: float,
+                   agility_time: int,
+                   agility_add: int,
+                   agility_mpy: float
+                   ):
     try:
         meal = Meal(
             meal_id=meal_id,
@@ -37,7 +41,10 @@ async def add_meal(meal_id: int,
             health_mpy=health_mpy,
             strength_time=strength_time,
             strength_add=strength_add,
-            strength_mpy=strength_mpy
+            strength_mpy=strength_mpy,
+            agility_time=agility_time,
+            agility_add=agility_add,
+            agility_mpy=agility_mpy
         )
         await meal.create()
 
