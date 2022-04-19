@@ -120,9 +120,10 @@ async def test():
 
     meal = await select_meal(meal_id=5)
     await effect_commands.add_effect(user_id=7, meal=meal)
-    await effect_commands.add_effect(user_id=7, meal=meal)
-    await effect_commands.add_effect(user_id=7, meal=meal)
-    await effect_commands.reduce_duration(user_id=7)
+    #await effect_commands.add_effect(user_id=7, meal=meal)
+    #await effect_commands.add_effect(user_id=7, meal=meal)
+    for i in range(5):
+        await effect_commands.reduce_duration(user_id=7)
 
     print()
 

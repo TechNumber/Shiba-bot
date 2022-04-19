@@ -55,28 +55,32 @@ async def delete_effect(user_id: int, meal_id):
 
 async def reduce_duration(user_id: int):
     await Effect.update.values(
-        max_health_duration=Effect.max_health_duration - 1).where(
-            and_(
-                Effect.max_health_duration > 0,
-                Effect.user_id == user_id
-            )
-        ).gino.status()
+        max_health_duration=Effect.max_health_duration - 1
+    ).where(
+        and_(
+            Effect.max_health_duration > 0,
+            Effect.user_id == user_id
+        )
+    ).gino.status()
     await Effect.update.values(
-        health_duration=Effect.health_duration - 1).where(
+        health_duration=Effect.health_duration - 1
+    ).where(
         and_(
             Effect.health_duration > 0,
             Effect.user_id == user_id
         )
     ).gino.status()
     await Effect.update.values(
-        strength_duration=Effect.strength_duration - 1).where(
+        strength_duration=Effect.strength_duration - 1
+    ).where(
         and_(
             Effect.strength_duration > 0,
             Effect.user_id == user_id
         )
     ).gino.status()
     await Effect.update.values(
-        agility_duration=Effect.agility_duration - 1).where(
+        agility_duration=Effect.agility_duration - 1
+    ).where(
         and_(
             Effect.agility_duration > 0,
             Effect.user_id == user_id
@@ -89,4 +93,4 @@ async def reduce_duration(user_id: int):
             Effect.strength_duration == 0,
             Effect.agility_duration == 0
         )
-    )
+    ).gino.status()
