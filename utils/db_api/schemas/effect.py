@@ -14,8 +14,6 @@ class Effect(TimedBaseModel):
         Поле связано внешним ключом с полем meal_id таблицы Meal.
         max_health_duration (int): Оставшееся время действия эффекта
         увеличения макс. здоровья в дуэлях. -1, если эффект перманентный
-        health_duration (int): Оставшееся время действия эффекта
-        увеличения текущего здоровья в дуэлях. -1, если эффект перманентный
         strength_duration (int): Оставшееся время действия эффекта
         увеличения силы в дуэлях. -1, если эффект перманентный
         agility_duration (int): Оставшееся время действия эффекта
@@ -34,7 +32,6 @@ class Effect(TimedBaseModel):
         ForeignKey('meals.meal_id', ondelete='CASCADE')
     )
     max_health_duration = Column(Integer)  # Время действия эффекта в дуэлях. -1, если эффект перманентный
-    health_duration = Column(Integer)  # Время действия эффекта в дуэлях. -1, если эффект перманентный
     strength_duration = Column(Integer)  # Время действия эффекта в дуэлях. -1, если эффект перманентный
     agility_duration = Column(Integer)  # Время действия эффекта в дуэлях. -1, если эффект перманентный
     query: sql.Select

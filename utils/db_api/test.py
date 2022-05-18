@@ -5,6 +5,8 @@ from asyncpg import UndefinedTableError
 from data import config
 from utils.db_api import user_commands, all_init, duel_commands, inventory_outfit_commands, effect_commands
 from utils.db_api.db_gino import db
+from utils.db_api.duel_commands import select_all_senders_id
+from utils.db_api.effect_commands import select_user_current_meals, heal
 from utils.db_api.meal_commands import select_meal
 from utils.db_api.schemas.duel import Duel
 from utils.db_api.schemas.inventory_meal import InventoryMeal
@@ -14,6 +16,7 @@ from utils.db_api.schemas.weapon import Weapon
 from utils.db_api.schemas.inventory_weapon import InventoryWeapon
 from utils.db_api.schemas.effect import Effect
 from utils.db_api import inventory_weapon_commands
+from utils.db_api.user_commands import combat_sequence, check_level_up, check_knockout
 
 
 async def test():
@@ -118,14 +121,42 @@ async def test():
     user = await User.query.where(User.user_id == 6).gino.first()
     await user.delete()
 
+    user = await User.query.where(User.user_id == 7).gino.first()
     meal = await select_meal(meal_id=5)
-    await effect_commands.add_effect(user_id=7, meal=meal)
+    await effect_commands.add_effect(user, meal=meal)
     #await effect_commands.add_effect(user_id=7, meal=meal)
     #await effect_commands.add_effect(user_id=7, meal=meal)
-    for i in range(5):
-        await effect_commands.reduce_duration(user_id=7)
-
-    print()
+    """
+    meals_list = await effect_commands.select_user_current_meals(user_id=7)
+    print(meals_list)
+    print(user.health)
+    await user.update(health=60).apply()
+    print(user.health)
+    await heal(user, 50)
+    print(user.health)
+    meal = await select_meal(meal_id=7)
+    await effect_commands.add_effect(user, meal=meal)
+    await user.update(health=60).apply()
+    await heal(user, 500)
+    print(user.health)
+    """
+    user_daniel = await User.query.where(User.user_id == 8).gino.first()
+    print(user_daniel.exp)
+    await user.update(health=600).apply()
+    duel_log = await combat_sequence(7, 8)
+    print(duel_log)
+    user_daniel = await User.query.where(User.user_id == 8).gino.first()
+    print(user_daniel.exp)
+    print(user_daniel.level)
+    await user_daniel.update(exp=500).apply()
+    lvlup_status = await check_level_up(8)
+    user_daniel = await User.query.where(User.user_id == 8).gino.first()
+    print(user_daniel.exp)
+    print(user_daniel.level)
+    print(lvlup_status)
+    ko = await check_knockout(8)
+    print(user_daniel.health)
+    print(ko)
 
 
 loop = asyncio.get_event_loop()
