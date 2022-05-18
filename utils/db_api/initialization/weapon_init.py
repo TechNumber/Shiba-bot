@@ -33,7 +33,7 @@ async def weapon_init():
         weapon_id=1,
         weapon_name="Палка",
         weapon_price=0,
-        weapon_description="Описание",
+        weapon_description="Описание", #TODO: описание оружия
         weapon_chars="Описание через format строки с выгрузкой эффектов",
         damage=30,
         agility_add=20,
