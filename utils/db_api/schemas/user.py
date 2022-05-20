@@ -56,6 +56,7 @@ class User(TimedBaseModel):
     agility = Column(Integer, default=1)
     level = Column(Integer, default=1)
     exp = Column(Integer, default=0)
+    lvlup = Column(Integer, default=0)  # TODO: добавить систему повышения характеристик
     weapon_id = Column(
         Integer,
         ForeignKey('weapons.weapon_id', ondelete='SET NULL'),
