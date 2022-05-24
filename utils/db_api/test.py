@@ -1,6 +1,7 @@
 import asyncio
 
 from asyncpg import UndefinedTableError
+from sqlalchemy import or_
 
 from data import config
 from utils.db_api import user_commands, all_init, duel_commands, inventory_outfit_commands, effect_commands
@@ -11,6 +12,7 @@ from utils.db_api.meal_commands import select_meal
 from utils.db_api.schemas.duel import Duel
 from utils.db_api.schemas.inventory_meal import InventoryMeal
 from utils.db_api.schemas.inventory_outfit import InventoryOutfit
+from utils.db_api.schemas.mob import Mob
 from utils.db_api.schemas.user import User
 from utils.db_api.schemas.weapon import Weapon
 from utils.db_api.schemas.inventory_weapon import InventoryWeapon
@@ -143,10 +145,12 @@ async def test():
     user_daniel = await User.query.where(User.user_id == 8).gino.first()
     print(user_daniel.exp)
     await user.update(health=600).apply()
-    duel_log = await combat_sequence(7, 8)
+    duel_log = await user_commands.mob_combat(8, 1)
     print(duel_log)
+
     user_daniel = await User.query.where(User.user_id == 8).gino.first()
     print(user_daniel.exp)
+    '''
     print(user_daniel.level)
     await user_daniel.update(exp=500).apply()
     lvlup_status = await check_level_up(8)
@@ -157,11 +161,6 @@ async def test():
     ko = await check_knockout(8)
     print(user_daniel.health)
     print(ko)
-    await duel_commands.add_duel(8, 7)
-    sender_ids = []
-    user_duels = await select_all_senders_id(7)
-    print(user_duels)
-    print(len(user_duels))
-
+    '''
 loop = asyncio.get_event_loop()
 loop.run_until_complete(test())

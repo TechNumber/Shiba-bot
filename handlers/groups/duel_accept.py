@@ -37,5 +37,10 @@ async def print_duel_list(message: types.message):
         duel_sender_users += f" - {duelist_shiba} (Хозяин: {duelist_name})\n"
     msg += duel_sender_users
     msg += "Чтобы принять вызов на дуэль, введите команду:\n '/accept @имя_пользователя'."
+    msg += "Чтобы отклонить вызов на дуэль, введите команду:\n '/decline @имя_пользователя'."
     await message.answer(msg, disable_web_page_preview=True)
 
+
+@dp.message_handler(Command("accept"), state=GameState.registered)
+async def duel_accept(message: types.message):
+    pass
