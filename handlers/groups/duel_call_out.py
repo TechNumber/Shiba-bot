@@ -31,21 +31,21 @@ async def duel_call_out(message: types.Message):
     if len(blocks) > 1 and "@" in blocks[1]:
         message_mention = blocks[1]
         i = 0
-        user_mention = (await dp.bot.get_chat_member(
+        playing_user = (await dp.bot.get_chat_member(
             user_id=user_id_list[i],
-            chat_id=user_id_list[i])).user.mention
-        while i < len(user_id_list) and message_mention != user_mention:
-            user_mention = (await dp.bot.get_chat_member(
+            chat_id=user_id_list[i])).user
+        while i < len(user_id_list) and message_mention != playing_user.mention:
+            playing_user = (await dp.bot.get_chat_member(
                 user_id=user_id_list[i],
-                chat_id=user_id_list[i])).user.mention
+                chat_id=user_id_list[i])).user
             i += 1
-        if user_mention != message_mention:
+        if playing_user.mention != message_mention:
             await message.answer("Вы не можете вызвать на бой пользователя без шибы!")
         else:
             await message.answer(
-                f"{user_mention}, ты был вызван на дуэль шибой {sender_shiba_name} пользователя {sender_link}! Ты можешь принять или отклонить вызов на дуэль, нажав на кнопку \"Дуэли\" в меню шибы.",
+                f"{playing_user.mention}, ты был вызван на дуэль шибой {sender_shiba_name} пользователя {sender_link}! Ты можешь принять или отклонить вызов на дуэль, нажав на кнопку \"Дуэли\" в меню шибы.",
                 disable_web_page_preview=True)
-            await duel_commands.add_duel(sender_id=message.from_user.id, receiver_id=user_id_list[i - 1])
+            await duel_commands.add_duel(sender_id=message.from_user.id, receiver_id=playing_user.id)
     elif len(blocks) > 1 and "tg://user?id=" in blocks[1]:
         id_from_message = int(blocks[1][blocks[1].index("tg://user?id=") +
                                         len("tg://user?id="):
