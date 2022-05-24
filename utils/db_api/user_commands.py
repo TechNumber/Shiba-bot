@@ -81,6 +81,9 @@ async def get_all_users_id():
     return user_id_list
 
 
+
+
+
 async def calculate_buffs(user_id: int):
     buffs = [0, 0, 1, 1]  # с 0 по 1 - прибавки к силе и ловкости; с 2 по 3 - множители силы и ловкости
     meal_id_list = await effect_commands.select_user_current_meals(user_id)
@@ -219,4 +222,3 @@ async def check_knockout(user_id):
         ko_status = True
         await user.update(exp=0).apply()
     return ko_status
-

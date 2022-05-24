@@ -13,3 +13,4 @@ class GameState(StatesGroup):
     shopping = State()
     inventory = State()
     naming = State()
+    level_up = State()
