@@ -241,6 +241,7 @@ async def mob_combat(id1, id2):
     u2_start_hp = user2.mob_health
     u1_cur_hp = u1_start_hp
     u2_cur_hp = u2_start_hp
+    cur_money = user1.money
     victor_id = -1
     log = "Сражение с мобом!\n"
     action_captions_strike = [" наносит удар.",
@@ -300,6 +301,8 @@ async def mob_combat(id1, id2):
     if victor_id == id1:
         cur_exp1 = user1.exp + 10 * user2.mob_level + random.randint(-user2.mob_level, user2.mob_level)
         await user1.update(exp=cur_exp1).apply()
+        cur_money += 10 * user2.mob_level + random.randint(-user2.mob_level * 5, user2.mob_level * 5)
+        await user1.update(money=cur_money).apply()
     else:
         cur_exp1 = (user1.exp + 10 * user2.mob_level + random.randint(-user2.mob_level, user2.mob_level)) // 2
         await user1.update(exp=cur_exp1).apply()
