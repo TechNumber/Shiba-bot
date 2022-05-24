@@ -157,7 +157,11 @@ async def test():
     ko = await check_knockout(8)
     print(user_daniel.health)
     print(ko)
-
+    await duel_commands.add_duel(8, 7)
+    sender_ids = []
+    user_duels = await select_all_senders_id(7)
+    print(user_duels)
+    print(len(user_duels))
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(test())
