@@ -50,7 +50,7 @@ async def delete_duel(sender_id: int,
         )
     ).gino.first()
     if duel is not None:
-        duel.delete()
+        await duel.delete()
     else:
         print("Запись не найдена")
 

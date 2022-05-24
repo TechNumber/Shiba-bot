@@ -6,7 +6,7 @@ from aiogram.dispatcher.filters import Command, StateFilter
 from sqlalchemy import or_
 
 from states.game_state import GameState
-from utils.db_api import user_commands, mob_commands
+from utils.db_api import user_commands, mob_commands, effect_commands
 from loader import dp, bot
 from utils.db_api.schemas.mob import Mob
 
@@ -39,4 +39,5 @@ async def fight_mob(message: types.message):
     ko = await user_commands.check_knockout(sender_id)
     if ko:
         log += "Шиба потерпела поражение! Весь опыт, накопленный на данном уровне, потерян."
+    await effect_commands.reduce_duration(sender_id)
     await message.answer(log, disable_web_page_preview=True)
