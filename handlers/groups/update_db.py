@@ -3,9 +3,12 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.builtin import Command, StateFilter
 from aiogram.utils.markdown import hcode
 
+from filters import IsCalledByOwner
+from keyboards.inline.callback_datas import call_service_callback
 from loader import dp
 from states.game_state import GameState
 from utils.db_api import user_commands as commands
+from utils.db_api.db_gino import db
 
 
 @dp.message_handler(Command("shiba_rename"), state=GameState.registered)
@@ -25,6 +28,13 @@ async def shiba_rename(message: types.Message):
     """
 
     await message.answer("Пришли мне новое имя пса в ответ на это сообщение")
+    await GameState.naming.set()
+
+
+@dp.callback_query_handler(IsCalledByOwner(), call_service_callback.filter(service_type="shiba_rename"),
+                           state=GameState.registered)
+async def shiba_rename_from_callback(call: types.CallbackQuery):
+    await call.message.answer("Пришли мне новое имя пса в ответ на это сообщение")
     await GameState.naming.set()
 
 

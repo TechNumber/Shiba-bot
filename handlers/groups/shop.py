@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery
 
 from filters import IsCalledByOwner
 from keyboards.inline.callback_datas import buy_item_callback, cancel_callback, show_item_callback, \
-    show_shop_items_callback
+    show_shop_items_callback, call_service_callback
 from keyboards.inline.shop.meal_shop_menus import get_shop_all_meals_menu, get_shop_meal_menu
 from keyboards.inline.shop.outfit_shop_menus import get_shop_all_outfits_menu, get_shop_outfit_menu
 from keyboards.inline.shop.weapon_shop_menus import get_shop_all_weapons_menu, get_shop_weapon_menu
@@ -13,6 +13,7 @@ from loader import dp
 from states.game_state import GameState
 from utils.db_api import weapon_commands, outfit_commands, meal_commands, inventory_weapon_commands, user_commands, \
     inventory_outfit_commands, inventory_meal_commands
+from utils.db_api.db_gino import db
 
 
 @dp.message_handler(Command("shop"), state=GameState.registered)
@@ -20,6 +21,15 @@ async def show_shop_weapons(message: types.Message):
     shop_weapons_menu = await get_shop_all_weapons_menu(user_id=message.from_user.id)
     await message.answer("Выберите товар из меню ниже",
                          reply_markup=shop_weapons_menu)
+    await GameState.shopping.set()
+
+
+@dp.callback_query_handler(IsCalledByOwner(), call_service_callback.filter(service_type="shop"),
+                           state=GameState.registered)
+async def show_shop_weapons_from_callback(call: CallbackQuery):
+    shop_weapons_menu = await get_shop_all_weapons_menu(user_id=call.from_user.id)
+    await call.message.answer("Выберите товар из меню ниже",
+                              reply_markup=shop_weapons_menu)
     await GameState.shopping.set()
 
 

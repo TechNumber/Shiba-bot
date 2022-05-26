@@ -7,7 +7,7 @@ from aiogram.types import CallbackQuery
 
 from filters import IsCalledByOwner
 from keyboards.inline.callback_datas import discard_item_callback, \
-    cancel_callback, show_inventory_items_callback, show_item_callback, equip_item_callback
+    cancel_callback, show_inventory_items_callback, show_item_callback, equip_item_callback, call_service_callback
 from keyboards.inline.inventory.home_inventory_menus import get_home_inventory_menu
 from keyboards.inline.inventory.meal_inventory_menus import get_inventory_all_meals_menu, get_inventory_meal_menu
 from keyboards.inline.inventory.outfit_inventory_menus import get_inventory_all_outfits_menu, get_inventory_outfit_menu
@@ -17,8 +17,8 @@ from states.game_state import GameState
 from utils.db_api import weapon_commands, outfit_commands, inventory_weapon_commands, user_commands, \
     inventory_outfit_commands, meal_commands, inventory_meal_commands, effect_commands
 
-
 # TODO: только пользователь, вызвавший инвентарь, может выполнять в нём действия
+from utils.db_api.db_gino import db
 
 
 @dp.message_handler(Command("inventory"), state=GameState.registered)
@@ -40,6 +40,14 @@ async def show_inventory_categories(message: types.Message):
     """
     await message.answer("Выберите категорию предметов",
                          reply_markup=await get_home_inventory_menu(user_id=message.from_user.id))
+    await GameState.inventory.set()
+
+
+@dp.callback_query_handler(IsCalledByOwner(), call_service_callback.filter(service_type="inventory"),
+                           state=GameState.registered)
+async def show_inventory_categories_from_callback(call: types.CallbackQuery):
+    await call.message.answer("Выберите категорию предметов",
+                              reply_markup=await get_home_inventory_menu(user_id=call.from_user.id))
     await GameState.inventory.set()
 
 
@@ -324,7 +332,7 @@ async def eat_meal(call: CallbackQuery, callback_data: dict):
     meal = await meal_commands.select_meal(int(callback_data.get("item_id")))
     user = await user_commands.select_user(user_id=call.from_user.id)
     await effect_commands.add_effect(user=user, meal=meal),
-    await inventory_meal_commands.discard_inventory_meal(user_id=user.user_id, meal=meal),
+    await inventory_meal_commands.discard_inventory_meal(user_id=user.user_id, meal_id=meal.meal_id),
     await show_inventory_meals(call)
 
 
