@@ -1,5 +1,6 @@
 from . import interruptions
 from . import start
+from . import my_shiba
 from . import update_db
 from . import inventory
 from . import shop

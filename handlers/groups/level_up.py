@@ -4,7 +4,7 @@ from aiogram.dispatcher.filters import Command
 from aiogram.types import CallbackQuery
 
 from filters import IsCalledByOwner
-from keyboards.inline.callback_datas import cancel_callback, level_attribute_up_callback
+from keyboards.inline.callback_datas import cancel_callback, level_attribute_up_callback, apply_level_up_callback
 from keyboards.inline.level_up.level_up_menus import get_level_up_menu
 from loader import dp
 from states.game_state import GameState
@@ -26,15 +26,15 @@ async def show_level_up_menu(message: types.Message, state: FSMContext):
         await message.answer(f"У Вас есть {user.level_up} очков повышения характеристик. Вы можете потратить их на "
                              "увеличение показателей здоровья, силы или ловкости. Выбирайте с умом!",
                              reply_markup=level_up_menu)
-    await GameState.level_up.set()
-    await state.update_data(
-        {
-            "level_up_points": user.level_up,
-            "health_added_points": 0,
-            "strength_added_points": 0,
-            "agility_added_points": 0
-        }
-    )
+        await GameState.level_up.set()
+        await state.update_data(
+            {
+                "level_up_points": user.level_up,
+                "health_added_points": 0,
+                "strength_added_points": 0,
+                "agility_added_points": 0
+            }
+        )
 
 
 @dp.callback_query_handler(IsCalledByOwner(), cancel_callback.filter(cancel_type="level_up"), state=GameState.level_up)
@@ -73,3 +73,29 @@ async def level_health_up(call: CallbackQuery, state: FSMContext):
             strength_added_points=points_distribution["strength_added_points"],
             agility_added_points=points_distribution["agility_added_points"]))
 
+
+@dp.callback_query_handler(IsCalledByOwner(), apply_level_up_callback.filter(),
+                           state=GameState.level_up)
+async def level_health_up(call: CallbackQuery, state: FSMContext):
+    points_distribution = await state.get_data()
+    if points_distribution["health_added_points"] + \
+            points_distribution["strength_added_points"] + \
+            points_distribution["agility_added_points"] > 0:
+        user = await user_commands.select_user(call.from_user.id)
+        await user.update(level_up=points_distribution["level_up_points"],
+                          health=user.health + 10 * points_distribution["health_added_points"],
+                          strength=user.strength + 1 * points_distribution["strength_added_points"],
+                          agility=user.agility + 1 * points_distribution["agility_added_points"]).apply()
+        await state.update_data(health_added_points=0,
+                                strength_added_points=0,
+                                agility_added_points=0)
+        points_distribution = await state.get_data()
+        await call.message.edit_text(
+            f"У Вас есть {points_distribution['level_up_points']} очков повышения характеристик. "
+            "Вы можете потратить их на увеличение показателей здоровья, силы или ловкости. "
+            "Выбирайте с умом!")
+        await call.message.edit_reply_markup(await get_level_up_menu(
+            user,
+            health_added_points=points_distribution["health_added_points"],
+            strength_added_points=points_distribution["strength_added_points"],
+            agility_added_points=points_distribution["agility_added_points"]))

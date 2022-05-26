@@ -14,7 +14,6 @@ async def add_dummies(message: types.message):
         await duel_commands.add_duel(i, sender_id)
     await message.answer("Болванчики добавлены!", disable_web_page_preview=True)
 '''
-#1368153657
 
 
 @dp.message_handler(Command("duel_list"), state=GameState.registered)
