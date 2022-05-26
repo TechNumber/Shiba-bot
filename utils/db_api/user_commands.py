@@ -93,13 +93,15 @@ async def calculate_buffs(user_id: int):
         buffs[3] *= cur_meal.agility_mpy
     user = await select_user(user_id)
     weapon = await select_weapon(user.weapon_id)
-    buffs[1] += weapon.agility_add
-    buffs[3] *= weapon.agility_mpy
+    if weapon is not None:
+        buffs[1] += weapon.agility_add
+        buffs[3] *= weapon.agility_mpy
     outfit = await select_outfit(user.outfit_id)
-    buffs[0] += outfit.strength_add
-    buffs[1] += outfit.agility_add
-    buffs[2] *= outfit.strength_mpy
-    buffs[3] *= outfit.agility_mpy
+    if outfit is not None:
+        buffs[0] += outfit.strength_add
+        buffs[1] += outfit.agility_add
+        buffs[2] *= outfit.strength_mpy
+        buffs[3] *= outfit.agility_mpy
     return buffs
 
 
