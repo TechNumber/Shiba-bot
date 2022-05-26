@@ -41,6 +41,9 @@ async def duel_call_out(message: types.Message):
             i += 1
         if playing_user.mention != message_mention:
             await message.answer("Вы не можете вызвать на бой пользователя без шибы!")
+        elif playing_user.id == message.from_user.id:
+            await message.answer("Борьба с самим собой — не на этом ли зиждется "
+                                 "течение нашей жизни?..")
         else:
             await message.answer(
                 f"{playing_user.mention}, ты был вызван на дуэль шибой {sender_shiba_name} пользователя {sender_link}! Ты можешь принять или отклонить вызов на дуэль, нажав на кнопку \"Дуэли\" в меню шибы.",
@@ -52,6 +55,9 @@ async def duel_call_out(message: types.Message):
                                         blocks[1].index(")")])
         if id_from_message not in user_id_list:
             await message.answer("Вы не можете вызвать на бой пользователя без шибы!")
+        elif id_from_message == message.from_user.id:
+            await message.answer("Борьба с самим собой — не на этом ли зиждется "
+                                 "течение нашей жизни?..")
         else:
             receiver_name = (await dp.bot.get_chat_member(
                 user_id=id_from_message,
