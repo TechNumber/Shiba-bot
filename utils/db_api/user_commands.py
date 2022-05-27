@@ -300,7 +300,7 @@ async def mob_combat(id1, id2):
         else:
             victor_id = -1
             log += "Ничья!\n"
-    if victor_id == id1:
+    if u2_cur_hp <= 0:
         cur_exp1 = user1.exp + 10 * user2.mob_level + random.randint(-user2.mob_level, user2.mob_level)
         await user1.update(exp=cur_exp1).apply()
         cur_money += 10 * user2.mob_level + random.randint(-user2.mob_level * 5, user2.mob_level * 5)
