@@ -1,10 +1,6 @@
 from aiogram import types
 from aiogram.dispatcher.filters import Command
-from aiogram.types import CallbackQuery
 
-from filters import IsCalledByOwner
-from handlers.groups import shop, inventory, mob_fight, update_db
-from keyboards.inline.callback_datas import call_service_callback
 from keyboards.inline.my_shiba.my_shiba_menus import get_my_shiba_menu
 from loader import dp
 from states.game_state import GameState

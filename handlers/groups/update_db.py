@@ -57,8 +57,9 @@ async def enter_shiba_name(message: types.Message):
     shiba_name = message.text
     await commands.update_shiba_name(shiba_name=shiba_name, user_id=message.from_user.id)
     user = await commands.select_user(user_id=message.from_user.id)
-    await message.answer("Данные обновлены. Запись в БД: \n" +
-                         hcode(f"user_id={user.user_id}\n"
-                               f"user_name={user.user_name}\n"
-                               f"shiba_name={user.shiba_name}"))
+    # await message.answer("Данные обновлены. Запись в БД: \n" +
+    #                      hcode(f"user_id={user.user_id}\n"
+    #                            f"user_name={user.user_name}\n"
+    #                            f"shiba_name={user.shiba_name}"))
+    await message.answer(f"Имя твоей шибы обновлено! Теперь твою собаку зовут {user.shiba_name}")
     await GameState.registered.set()
