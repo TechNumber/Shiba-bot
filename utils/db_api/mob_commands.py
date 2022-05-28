@@ -45,7 +45,7 @@ async def generate_all_mobs_chars():
         await mob.update(
             mob_chars=''.join([
                 'Имя: {}\n'.format(mob.mob_name),
-                'Описание: {}\n'.format(mob.mob_description),
+                'Описание:\n {}\n'.format(mob.mob_description),
                 'Здоровье: {}\n'.format(mob.mob_health),
                 'Сила: {}\n'.format(mob.mob_strength),
                 'Ловкость: {}\n'.format(mob.mob_agility),

@@ -263,7 +263,7 @@ async def mob_combat(id1, id2):
     u2_cur_hp = u2_start_hp
     cur_money = user1.money
     victor_id = -1
-    log = "Сражение с мобом!\n"
+    log = (f"{user2.mob_chars}\n")
     action_captions_strike = [" наносит удар.",
                               " целится в слабое место!",
                               " совершает стремительный выпад.",
