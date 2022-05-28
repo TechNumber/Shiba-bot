@@ -3,7 +3,7 @@ import random
 import gino
 from aiogram import types
 from aiogram.dispatcher.filters import Command, StateFilter
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 
 from filters import IsCalledByOwner
 from keyboards.inline.callback_datas import call_service_callback
@@ -20,7 +20,7 @@ async def fight_mob(message: types.message):
     sender = await user_commands.select_user(sender_id)
     user_lvl = sender.level
     mob_ids = await Mob.query.where(
-        or_(
+        and_(
             Mob.mob_level > user_lvl - 5,
             Mob.mob_level < user_lvl + 5
         )
@@ -53,7 +53,7 @@ async def fight_mob_from_callback(call: types.CallbackQuery):
     sender = await user_commands.select_user(sender_id)
     user_lvl = sender.level
     mob_ids = await Mob.query.where(
-        or_(
+        and_(
             Mob.mob_level > user_lvl - 5,
             Mob.mob_level < user_lvl + 5
         )

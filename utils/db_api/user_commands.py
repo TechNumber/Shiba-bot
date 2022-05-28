@@ -111,15 +111,23 @@ async def combat_sequence(id1, id2):
     buffs1 = await calculate_buffs(id1)
     buffs2 = await calculate_buffs(id2)
     weapon1 = await select_weapon(user1.weapon_id)
+    u1_str = user1.strength * buffs1[2] + buffs1[0]
+    u2_str = user2.strength * buffs2[2] + buffs2[0]
+    if weapon1 is not None:
+        weapon_dmg1 = weapon1.damage
+    else:
+        weapon_dmg1 = u1_str
     weapon2 = await select_weapon(user2.weapon_id)
+    if weapon2 is not None:
+        weapon_dmg2 = weapon1.damage
+    else:
+        weapon_dmg2 = u2_str
     u1_name = str(user1.shiba_name)
     u2_name = str(user2.shiba_name)
-    u1_str = user1.strength * buffs1[2] + buffs1[0]
     u1_ag = user1.agility * buffs1[3] + buffs1[1]
-    u2_str = user2.strength * buffs2[2] + buffs2[0]
     u2_ag = user2.agility * buffs2[3] + buffs2[1]
-    u1_dmg = weapon1.damage * (1 + u1_str * 0.1)
-    u2_dmg = weapon2.damage * (1 + u2_str * 0.1)
+    u1_dmg = weapon_dmg1 * (1 + u1_str * 0.1)
+    u2_dmg = weapon_dmg2 * (1 + u2_str * 0.1)
     u1_dodge_rate = u1_ag * 0.02 - u2_ag * 0.005
     u2_dodge_rate = u2_ag * 0.02 - u1_ag * 0.005
     u1_start_hp = user1.health
@@ -148,6 +156,8 @@ async def combat_sequence(id1, id2):
             caption += " " + u2_name + action_captions_dodge[random.randint(0, 3)] + "\n"
         else:
             dmg = u1_dmg + random.randint(-10, 10)
+            if dmg < 0:
+                dmg = 0
             caption += " " + u2_name + action_captions_hurt[random.randint(0, 3)] + str(int(dmg)) + "\n"
             u2_cur_hp -= dmg
         if u2_cur_hp <= 0:
@@ -161,6 +171,8 @@ async def combat_sequence(id1, id2):
             caption += " " + u1_name + action_captions_dodge[random.randint(0, 3)] + "\n"
         else:
             dmg = u2_dmg + random.randint(-10, 10)
+            if dmg < 0:
+                dmg = 0
             caption += " " + u1_name + action_captions_hurt[random.randint(0, 3)] + str(int(dmg)) + "\n"
             u1_cur_hp -= dmg
         if u1_cur_hp <= 0:
@@ -169,7 +181,7 @@ async def combat_sequence(id1, id2):
             victor_id = id2
             break
         log += caption
-        log += "<>\n"
+        log += "----\n"
     if victor_id is None:
         u1_dmg_dealt = u2_cur_hp / u2_start_hp
         u2_dmg_dealt = u1_cur_hp / u1_start_hp
@@ -218,9 +230,11 @@ async def check_knockout(user_id):
     ko_status = False
     user = await select_user(user_id)
     cur_hp = user.health
+    q_hp = int(user.max_health / 4)
     if cur_hp <= 0:
         ko_status = True
         await user.update(exp=0).apply()
+        await user.update(health=q_hp).apply()
     return ko_status
 
 
@@ -228,14 +242,18 @@ async def mob_combat(id1, id2):
     user1 = await select_user(id1)
     user2 = await select_mob(id2)
     buffs1 = await calculate_buffs(id1)
+    u1_str = user1.strength * buffs1[2] + buffs1[0]
     weapon1 = await select_weapon(user1.weapon_id)
+    if weapon1 is not None:
+        weapon_dmg = weapon1.damage
+    else:
+        weapon_dmg = u1_str
     u1_name = str(user1.shiba_name)
     u2_name = user2.mob_name
-    u1_str = user1.strength * buffs1[2] + buffs1[0]
     u1_ag = user1.agility * buffs1[3] + buffs1[1]
     u2_str = user2.mob_strength
     u2_ag = user2.mob_agility
-    u1_dmg = weapon1.damage * (1 + u1_str * 0.1)
+    u1_dmg = weapon_dmg * (1 + u1_str * 0.1)
     u2_dmg = 10 * (1 + u2_str * 0.1)
     u1_dodge_rate = u1_ag * 0.02 - u2_ag * 0.005
     u2_dodge_rate = u2_ag * 0.02 - u1_ag * 0.005
@@ -266,6 +284,8 @@ async def mob_combat(id1, id2):
             caption += " " + u2_name + action_captions_dodge[random.randint(0, 3)] + "\n"
         else:
             dmg = u1_dmg + random.randint(-10, 10)
+            if dmg < 0:
+                dmg = 0
             caption += " " + u2_name + action_captions_hurt[random.randint(0, 3)] + str(int(dmg)) + "\n"
             u2_cur_hp -= dmg
         if u2_cur_hp <= 0:
@@ -279,6 +299,8 @@ async def mob_combat(id1, id2):
             caption += " " + u1_name + action_captions_dodge[random.randint(0, 3)] + "\n"
         else:
             dmg = u2_dmg + random.randint(-10, 10)
+            if dmg < 0:
+                dmg = 0
             caption += " " + u1_name + action_captions_hurt[random.randint(0, 3)] + str(int(dmg)) + "\n"
             u1_cur_hp -= dmg
         if u1_cur_hp <= 0:
@@ -287,7 +309,7 @@ async def mob_combat(id1, id2):
             victor_id = id2
             break
         log += caption
-        log += "<>\n"
+        log += "----\n"
     if victor_id is None:
         u1_dmg_dealt = u2_cur_hp / u2_start_hp
         u2_dmg_dealt = u1_cur_hp / u1_start_hp
@@ -300,13 +322,15 @@ async def mob_combat(id1, id2):
         else:
             victor_id = -1
             log += "Ничья!\n"
-    if u2_cur_hp <= 0:
+    if u2_cur_hp <= 0 and victor_id == id1:
         cur_exp1 = user1.exp + 10 * user2.mob_level + random.randint(-user2.mob_level, user2.mob_level)
         await user1.update(exp=cur_exp1).apply()
         cur_money += 10 * user2.mob_level + random.randint(-user2.mob_level * 5, user2.mob_level * 5)
         await user1.update(money=cur_money).apply()
-    else:
+    elif u2_cur_hp > 0 and victor_id == id1:
         cur_exp1 = (user1.exp + 10 * user2.mob_level + random.randint(-user2.mob_level, user2.mob_level)) // 2
         await user1.update(exp=cur_exp1).apply()
+    else:
+        pass
     await user1.update(health=u1_cur_hp).apply()
     return log
