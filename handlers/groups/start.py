@@ -1,10 +1,19 @@
+import os
+import pathlib
+import random
+import shutil
+
 from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart, CommandHelp
+from aiogram.types import InputFile, InputMedia, InputMediaPhoto
 
+from filters import IsCalledByOwner
 from handlers.groups.help import bot_help
+from keyboards.inline.callback_datas import choose_picture_callback, cancel_callback
+from keyboards.inline.choose_picture.choose_picture_menu import get_choose_picture_menu
 from loader import dp
 from states.game_state import GameState
-from utils.db_api import user_commands as commands
+from utils.db_api import user_commands as commands, user_commands
 
 
 @dp.message_handler(CommandStart(), state=GameState.registered)
@@ -54,4 +63,40 @@ async def bot_start_not_registered(message: types.Message):
         disable_web_page_preview=True
     )
     await bot_help(message)
+    if len(os.listdir(pathlib.Path(__file__).parent / "../../user_pictures/unused")) > 0:
+        picture = random.choice(os.listdir(pathlib.Path(__file__).parent / "../../user_pictures/unused"))
+        await GameState.choosing_picture.set()
+        await dp.bot.send_photo(
+            message.chat.id,
+            InputFile(path_or_bytesio=pathlib.Path(__file__).parent / "../../user_pictures/unused/" / picture),
+            f"Перед тем, как продолжить, выбери свою шибу. "
+            f"Выбирай тщательно: её нельзя будет сменить впоследствии!",
+            reply_markup=await get_choose_picture_menu(message.from_user.id, picture)
+        )
+    else:
+        await GameState.registered.set()
+
+
+@dp.callback_query_handler(IsCalledByOwner(), choose_picture_callback.filter(),
+                           state=GameState.choosing_picture)
+async def choose_picture(call: types.CallbackQuery):
+    user = await user_commands.select_user(user_id=call.from_user.id)
+    picture = (call.data.split(":"))[-1]
+    await user.update(pic_path=picture).apply()
+    shutil.move(pathlib.Path(__file__).parent / "../../user_pictures/unused" / picture,
+                pathlib.Path(__file__).parent / "../../user_pictures/used" / picture)
+    await call.message.edit_caption("Шиба успешно выбрана!", reply_markup=None)
     await GameState.registered.set()
+
+
+@dp.callback_query_handler(IsCalledByOwner(), cancel_callback.filter(cancel_type="picture"),
+                           state=GameState.choosing_picture)
+async def change_picture(call: types.CallbackQuery):
+    user = await user_commands.select_user(user_id=call.from_user.id)
+    picture = random.choice(os.listdir(pathlib.Path(__file__).parent / "../../user_pictures/unused"))
+    #while
+    input_media_photo = InputMediaPhoto(InputFile(path_or_bytesio=pathlib.Path(__file__).parent / "../../user_pictures/unused/" / picture))
+    await call.message.edit_media(
+        input_media_photo,
+        reply_markup=await get_choose_picture_menu(call.from_user.id, picture)
+    )

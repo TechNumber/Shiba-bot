@@ -12,7 +12,7 @@ class User(TimedBaseModel):
         user_id (int, PK): ID пользователя в Telegram.
         user_name (str): Имя пользователя в Telegram.
         shiba_name (str): Имя собаки пользователя.
-        pic_url (str): Адрес картинки собаки (персонажа) пользователя.
+        pic_path (str): Адрес картинки собаки (персонажа) пользователя.
         max_health (int): Максимальное значение, которого может достигать здоровье
         игрока.
         health (int): Текущее значение здоровья игрока.
@@ -46,7 +46,7 @@ class User(TimedBaseModel):
     user_id = Column(BigInteger, primary_key=True)
     user_name = Column(String(100))
     shiba_name = Column(String(100))
-    pic_url = Column(String(255))
+    pic_path = Column(String(255))
     max_health = Column(Integer, default=100)
     health = Column(Integer, default=100)
     hunger = Column(Integer, default=100)

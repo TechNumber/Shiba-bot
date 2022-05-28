@@ -33,7 +33,7 @@ async def mob_init():
         mob_id=1,
         mob_name="Боб",
         mob_description="Просто Боб",
-        mob_pic_url="",
+        mob_pic_path="",
         mob_health=10,
         mob_strength=1,
         mob_agility=1,
