@@ -4,7 +4,8 @@ from aiogram.dispatcher.filters import Command
 from aiogram.types import CallbackQuery
 
 from filters import IsCalledByOwner
-from keyboards.inline.callback_datas import cancel_callback, level_attribute_up_callback, apply_level_up_callback
+from keyboards.inline.callback_datas import cancel_callback, level_attribute_up_callback, apply_level_up_callback, \
+    call_service_callback
 from keyboards.inline.level_up.level_up_menus import get_level_up_menu
 from loader import dp
 from states.game_state import GameState
@@ -26,6 +27,35 @@ async def show_level_up_menu(message: types.Message, state: FSMContext):
         await message.answer(f"У Вас есть {user.level_up} очков повышения характеристик. Вы можете потратить их на "
                              "увеличение показателей здоровья, силы или ловкости. Выбирайте с умом!",
                              reply_markup=level_up_menu)
+        await GameState.level_up.set()
+        await state.update_data(
+            {
+                "level_up_points": user.level_up,
+                "max_health_added_points": 0,
+                "strength_added_points": 0,
+                "agility_added_points": 0
+            }
+        )
+
+
+@dp.callback_query_handler(IsCalledByOwner(), call_service_callback.filter(service_type="level_up"),
+                           state=GameState.registered)
+async def show_level_up_menu_from_callback(call: types.CallbackQuery, state: FSMContext):
+    user = await user_commands.select_user(call.from_user.id)
+    if user.level_up == 0:
+        await call.message.answer(
+            "Похоже, у вас нет очков повышения характеристик... "
+            "Доблестно сражайтесь с другими игроками или с монстрами подземелий, чтобы заработать "
+            "очки повышения характеристик!")
+    else:
+        level_up_menu = await get_level_up_menu(user,
+                                                max_health_added_points=0,
+                                                strength_added_points=0,
+                                                agility_added_points=0)
+        await call.message.answer(
+            f"У Вас есть {user.level_up} очков повышения характеристик. Вы можете потратить их на "
+            "увеличение показателей здоровья, силы или ловкости. Выбирайте с умом!",
+            reply_markup=level_up_menu)
         await GameState.level_up.set()
         await state.update_data(
             {

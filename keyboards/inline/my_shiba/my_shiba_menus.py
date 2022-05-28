@@ -34,6 +34,15 @@ async def get_my_shiba_menu(user_id: int):
             ],
             [
                 InlineKeyboardButton(
+                    text="Повысить характеристики",
+                    callback_data=call_service_callback.new(
+                        user_id=user_id,
+                        service_type="level_up"
+                    )
+                )
+            ],
+            [
+                InlineKeyboardButton(
                     text="Переименовать шибу",
                     callback_data=call_service_callback.new(
                         user_id=user_id,

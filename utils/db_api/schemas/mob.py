@@ -27,7 +27,7 @@ class Mob(TimedBaseModel):
 
     mob_id = Column(BigInteger, primary_key=True)
     mob_name = Column(String(100))
-    mob_description = Column(String(255))
+    mob_description = Column(String(1000))
     mob_chars = Column(String(1000), default="")
     mob_pic_path = Column(String(255), default="")
     mob_health = Column(Integer, default=1)
