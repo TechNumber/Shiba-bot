@@ -5,7 +5,7 @@ from utils.db_api.schemas.user import User
 
 
 async def get_level_up_menu(user: User,
-                            health_added_points: int,
+                            max_health_added_points: int,
                             strength_added_points: int,
                             agility_added_points: int):
     level_up_menu = InlineKeyboardMarkup(
@@ -13,10 +13,10 @@ async def get_level_up_menu(user: User,
         inline_keyboard=[
             [
                 InlineKeyboardButton(
-                    text=f"Здоровье: {user.health}. Очков добавлено: {health_added_points}",
+                    text=f"Здоровье: {user.max_health}. Очков добавлено: {max_health_added_points}",
                     callback_data=level_attribute_up_callback.new(
                         user_id=user.user_id,
-                        attribute_type="health"
+                        attribute_type="max_health"
                     )
                 )
             ],

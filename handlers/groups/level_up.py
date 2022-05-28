@@ -20,7 +20,7 @@ async def show_level_up_menu(message: types.Message, state: FSMContext):
                              "очки повышения характеристик!")
     else:
         level_up_menu = await get_level_up_menu(user,
-                                                health_added_points=0,
+                                                max_health_added_points=0,
                                                 strength_added_points=0,
                                                 agility_added_points=0)
         await message.answer(f"У Вас есть {user.level_up} очков повышения характеристик. Вы можете потратить их на "
@@ -30,7 +30,7 @@ async def show_level_up_menu(message: types.Message, state: FSMContext):
         await state.update_data(
             {
                 "level_up_points": user.level_up,
-                "health_added_points": 0,
+                "max_health_added_points": 0,
                 "strength_added_points": 0,
                 "agility_added_points": 0
             }
@@ -47,13 +47,13 @@ async def cancel_level_up(call: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(IsCalledByOwner(), level_attribute_up_callback.filter(),
                            state=GameState.level_up)
-async def level_health_up(call: CallbackQuery, state: FSMContext):
+async def level_max_health_up(call: CallbackQuery, state: FSMContext):
     points_distribution = await state.get_data()
     if points_distribution["level_up_points"] > 0:
         attribute_type = (call.data.split(":"))[-1]
-        if attribute_type == "health":
-            await state.update_data(health_added_points=points_distribution["health_added_points"] + 1)
-            points_distribution["health_added_points"] += 1
+        if attribute_type == "max_health":
+            await state.update_data(max_health_added_points=points_distribution["max_health_added_points"] + 1)
+            points_distribution["max_health_added_points"] += 1
         elif attribute_type == "strength":
             await state.update_data(strength_added_points=points_distribution["strength_added_points"] + 1)
             points_distribution["strength_added_points"] += 1
@@ -69,24 +69,24 @@ async def level_health_up(call: CallbackQuery, state: FSMContext):
         user = await user_commands.select_user(user_id=call.from_user.id)
         await call.message.edit_reply_markup(await get_level_up_menu(
             user,
-            health_added_points=points_distribution["health_added_points"],
+            max_health_added_points=points_distribution["max_health_added_points"],
             strength_added_points=points_distribution["strength_added_points"],
             agility_added_points=points_distribution["agility_added_points"]))
 
 
 @dp.callback_query_handler(IsCalledByOwner(), apply_level_up_callback.filter(),
                            state=GameState.level_up)
-async def level_health_up(call: CallbackQuery, state: FSMContext):
+async def level_max_health_up(call: CallbackQuery, state: FSMContext):
     points_distribution = await state.get_data()
-    if points_distribution["health_added_points"] + \
+    if points_distribution["max_health_added_points"] + \
             points_distribution["strength_added_points"] + \
             points_distribution["agility_added_points"] > 0:
         user = await user_commands.select_user(call.from_user.id)
         await user.update(level_up=points_distribution["level_up_points"],
-                          health=user.health + 10 * points_distribution["health_added_points"],
+                          max_health=user.max_health + 10 * points_distribution["max_health_added_points"],
                           strength=user.strength + 1 * points_distribution["strength_added_points"],
                           agility=user.agility + 1 * points_distribution["agility_added_points"]).apply()
-        await state.update_data(health_added_points=0,
+        await state.update_data(max_health_added_points=0,
                                 strength_added_points=0,
                                 agility_added_points=0)
         points_distribution = await state.get_data()
@@ -96,6 +96,6 @@ async def level_health_up(call: CallbackQuery, state: FSMContext):
             "Выбирайте с умом!")
         await call.message.edit_reply_markup(await get_level_up_menu(
             user,
-            health_added_points=points_distribution["health_added_points"],
+            max_health_added_points=points_distribution["max_health_added_points"],
             strength_added_points=points_distribution["strength_added_points"],
             agility_added_points=points_distribution["agility_added_points"]))

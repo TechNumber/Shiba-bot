@@ -1,12 +1,12 @@
 from aiogram import types
-from aiogram.dispatcher.filters.builtin import CommandHelp
+from aiogram.dispatcher.filters import CommandHelp
 
-from filters.is_chat import IsChat
 from loader import dp
 
 
-@dp.message_handler(CommandHelp(), IsChat())
+@dp.message_handler(CommandHelp(), state="*")
 async def bot_help(message: types.Message):
+    await message.answer("Правила игры бот отправил тебе в личные сообщения.")
     if message.from_user.username is not None:
         sender_link = f"<a href=\"t.me/{message.from_user.username}\">{message.from_user.username}</a>"
     else:

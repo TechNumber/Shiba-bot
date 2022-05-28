@@ -13,7 +13,7 @@ class Mob(TimedBaseModel):
         mob_name (str): Название моба.
         mob_description (str): Описание моба.
         mob_chars (str): Описание характеристик моба.
-        mob_pic_url (str): Адрес картинки моба.
+        mob_pic_path (str): Адрес картинки моба.
         mob_health (int): Запас здоровья моба.
         mob_strength (int): Значение силы моба. Влияет на наносимый в сражениях урон.
         mob_agility (int): Значение ловкости моба. Влияет на шанс уклонения от атаки
@@ -29,7 +29,7 @@ class Mob(TimedBaseModel):
     mob_name = Column(String(100))
     mob_description = Column(String(255))
     mob_chars = Column(String(1000), default="")
-    mob_pic_url = Column(String(255), default="")
+    mob_pic_path = Column(String(255), default="")
     mob_health = Column(Integer, default=1)
     mob_strength = Column(Integer, default=1)
     mob_agility = Column(Integer, default=1)

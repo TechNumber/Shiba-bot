@@ -14,7 +14,7 @@ from utils.db_api.weapon_commands import select_weapon
 async def add_user(user_id: int,
                    user_name: str,
                    shiba_name: str = None,
-                   pic_url: str = None,
+                   pic_path: str = None,
                    weapon_id: int = None,
                    outfit_id: int = None):
     try:
@@ -22,7 +22,7 @@ async def add_user(user_id: int,
             user_id=user_id,
             user_name=user_name,
             shiba_name=shiba_name,
-            pic_url=pic_url,
+            pic_path=pic_path,
             weapon_id=weapon_id,
             outfit_id=outfit_id
         )

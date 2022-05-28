@@ -18,3 +18,4 @@ show_shop_items_callback = CallbackData("show_shop_items", "user_id", "item_type
 level_attribute_up_callback = CallbackData("level_attribute_up", "user_id", "attribute_type")
 apply_level_up_callback = CallbackData("apply_level_up", "user_id")
 call_service_callback = CallbackData("call_service", "user_id", "service_type")
+choose_picture_callback = CallbackData("choose_picure", "user_id", "picture_path")

@@ -14,3 +14,4 @@ class GameState(StatesGroup):
     inventory = State()
     naming = State()
     level_up = State()
+    choosing_picture = State()
