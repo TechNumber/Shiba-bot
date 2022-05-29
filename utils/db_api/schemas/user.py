@@ -50,7 +50,7 @@ class User(TimedBaseModel):
     max_health = Column(Integer, default=100)
     health = Column(Integer, default=100)
     hunger = Column(Integer, default=100)
-    money = Column(BigInteger, default=100)
+    money = Column(BigInteger, default=200)
     strength = Column(Integer, default=1)
     agility = Column(Integer, default=1)
     level = Column(Integer, default=1)

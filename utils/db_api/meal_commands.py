@@ -70,7 +70,7 @@ async def generate_all_meals_chars():
                 'Название: {}\n'.format(meal.meal_name),
                 'Цена: {}\n'.format(meal.meal_price),
                 'Описание: {}\n'.format(meal.meal_description),
-                'На сколько минут увеличивает максимальное здоровье: {}\n'.format(
+                'На сколько ходов увеличивает максимальное здоровье: {}\n'.format(
                     meal.max_health_time
                 ) if meal.max_health_time != 0 else '',
                 'На сколько единиц увеличивает максимальное здоровье: {}\n'.format(
@@ -80,7 +80,7 @@ async def generate_all_meals_chars():
                     Decimal(meal.max_health_mpy).quantize(Decimal('.1')).normalize()
                 ) if meal.max_health_mpy != 1 else '',
 
-                'На сколько минут увеличивает здоровье: {}\n'.format(
+                'На сколько ходов увеличивает здоровье: {}\n'.format(
                     meal.health_time
                 ) if meal.health_time != 0 else '',
                 'На сколько единиц увеличивает здоровье: {}\n'.format(
@@ -91,7 +91,7 @@ async def generate_all_meals_chars():
                     Decimal(meal.health_mpy).quantize(Decimal('.1')).normalize()
                 ) if meal.health_mpy != 1 else '',
 
-                'На сколько минут увеличивает силу: {}\n'.format(
+                'На сколько ходов увеличивает силу: {}\n'.format(
                     meal.strength_time
                 ) if meal.strength_time != 0 else '',
                 'На сколько единиц увеличивает силу: {}\n'.format(
