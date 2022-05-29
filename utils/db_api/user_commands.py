@@ -151,7 +151,7 @@ async def combat_sequence(id1, id2):
 
     for i in range(10):
         caption = u1_name + action_captions_strike[random.randint(0, 3)]
-        hit_or_miss = (random.randint(0, 1) <= u2_dodge_rate)
+        hit_or_miss = (random.random() <= u2_dodge_rate)
         if hit_or_miss:
             caption += " " + u2_name + action_captions_dodge[random.randint(0, 3)] + "\n"
         else:
@@ -166,7 +166,7 @@ async def combat_sequence(id1, id2):
             victor_id = id1
             break
         caption += u2_name + action_captions_strike[random.randint(0, 3)]
-        hit_or_miss = (random.randint(0, 1) <= u1_dodge_rate)
+        hit_or_miss = (random.random() <= u1_dodge_rate)
         if hit_or_miss:
             caption += " " + u1_name + action_captions_dodge[random.randint(0, 3)] + "\n"
         else:
@@ -279,7 +279,7 @@ async def mob_combat(id1, id2):
 
     for i in range(10):
         caption = u1_name + action_captions_strike[random.randint(0, 3)]
-        hit_or_miss = (random.randint(0, 1) <= u2_dodge_rate)
+        hit_or_miss = (random.random() <= u2_dodge_rate)
         if hit_or_miss:
             caption += " " + u2_name + action_captions_dodge[random.randint(0, 3)] + "\n"
         else:
@@ -294,7 +294,7 @@ async def mob_combat(id1, id2):
             victor_id = id1
             break
         caption += u2_name + action_captions_strike[random.randint(0, 3)]
-        hit_or_miss = (random.randint(0, 1) <= u1_dodge_rate)
+        hit_or_miss = (random.random() <= u1_dodge_rate)
         if hit_or_miss:
             caption += " " + u1_name + action_captions_dodge[random.randint(0, 3)] + "\n"
         else:
