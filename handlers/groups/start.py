@@ -8,6 +8,7 @@ from aiogram.dispatcher.filters.builtin import CommandStart, CommandHelp
 from aiogram.types import InputFile, InputMedia, InputMediaPhoto
 
 from filters import IsCalledByOwner
+from filters.is_player import IsPlayer
 from handlers.groups.help import bot_help
 from handlers.groups.update_db import shiba_rename_from_callback
 from keyboards.inline.callback_datas import choose_picture_callback, cancel_callback
@@ -19,6 +20,12 @@ from utils.db_api import user_commands as commands, user_commands
 
 @dp.message_handler(CommandStart(), state=GameState.registered)
 async def bot_start_registered(message: types.Message):
+    await message.answer("Ты уже зарегистрирован в игре!")
+
+
+@dp.message_handler(CommandStart(), IsPlayer(), state=None)
+async def bot_start_is_player(message: types.Message):
+    await GameState.registered.set()
     await message.answer("Ты уже зарегистрирован в игре!")
 
 
