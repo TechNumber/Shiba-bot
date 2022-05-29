@@ -14,8 +14,8 @@ from utils.db_api.db_gino import db
 from utils.db_api.schemas.mob import Mob
 
 
-@dp.message_handler(Command("fight_mob"), state=GameState.registered)
-async def fight_mob(message: types.message):
+@dp.message_handler(Command("mob_fight"), state=GameState.registered)
+async def mob_fight(message: types.message):
     sender_id = (await user_commands.select_user(message.from_user.id)).user_id
     sender = await user_commands.select_user(sender_id)
     user_lvl = sender.level
@@ -48,7 +48,7 @@ async def fight_mob(message: types.message):
 
 @dp.callback_query_handler(IsCalledByOwner(), call_service_callback.filter(service_type="mob_fight"),
                            state=GameState.registered)
-async def fight_mob_from_callback(call: types.CallbackQuery):
+async def mob_fight_from_callback(call: types.CallbackQuery):
     sender_id = (await user_commands.select_user(call.from_user.id)).user_id
     sender = await user_commands.select_user(sender_id)
     user_lvl = sender.level

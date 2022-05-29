@@ -23,3 +23,14 @@ async def in_shop(message: types.Message):
         None
     """
     await message.answer("Ваша собака не может выполнять никаких действий, пока шиба находится в магазине!")
+
+
+@dp.message_handler(state=GameState.inventory)
+async def in_inventory(message: types.Message):
+    await message.answer("Ваша собака не может выполнять никаких действий, пока шиба находится в инвентаре!")
+
+
+@dp.message_handler(state=GameState.level_up)
+async def in_level_up(message: types.Message):
+    await message.answer("Ваша собака не может выполнять никаких действий, пока шиба "
+                         "находится в меню повышения характеристик!")
