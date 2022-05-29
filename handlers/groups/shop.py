@@ -31,6 +31,7 @@ async def show_shop_weapons_from_callback(call: CallbackQuery):
     await call.message.answer("Выберите товар из меню ниже",
                               reply_markup=shop_weapons_menu)
     await GameState.shopping.set()
+    await call.answer(cache_time=15)
 
 
 @dp.callback_query_handler(IsCalledByOwner(), cancel_callback.filter(cancel_type="shop"), state=GameState.shopping)

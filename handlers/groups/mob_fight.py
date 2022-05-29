@@ -77,3 +77,4 @@ async def mob_fight_from_callback(call: types.CallbackQuery):
         log += "Шиба потерпела поражение! Весь опыт, накопленный на данном уровне, потерян."
     await effect_commands.reduce_duration(sender_id)
     await call.message.answer(log, disable_web_page_preview=True)
+    await call.answer(cache_time=15)

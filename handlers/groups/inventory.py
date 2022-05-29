@@ -49,6 +49,7 @@ async def show_inventory_categories_from_callback(call: types.CallbackQuery):
     await call.message.answer("Выберите категорию предметов",
                               reply_markup=await get_home_inventory_menu(user_id=call.from_user.id))
     await GameState.inventory.set()
+    await call.answer(cache_time=15)
 
 
 @dp.callback_query_handler(IsCalledByOwner(), cancel_callback.filter(cancel_type="inventory"),

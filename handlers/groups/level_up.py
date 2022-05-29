@@ -65,6 +65,7 @@ async def show_level_up_menu_from_callback(call: types.CallbackQuery, state: FSM
                 "agility_added_points": 0
             }
         )
+    await call.answer(cache_time=15)
 
 
 @dp.callback_query_handler(IsCalledByOwner(), cancel_callback.filter(cancel_type="level_up"), state=GameState.level_up)
