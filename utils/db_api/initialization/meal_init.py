@@ -32,7 +32,7 @@ async def meal_init():
     await meal_commands.add_meal(
         meal_id=1,
         meal_name="Сухой корм",
-        meal_price=0,
+        meal_price=20,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -51,7 +51,7 @@ async def meal_init():
     await meal_commands.add_meal(
         meal_id=2,
         meal_name="Говяжья кость",
-        meal_price=0,
+        meal_price=70,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -70,7 +70,7 @@ async def meal_init():
     await meal_commands.add_meal(
         meal_id=3,
         meal_name="Листик мяты",
-        meal_price=0,
+        meal_price=250,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -89,7 +89,7 @@ async def meal_init():
     await meal_commands.add_meal(
         meal_id=4,
         meal_name="Утиная грудка",
-        meal_price=0,
+        meal_price=200,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -108,7 +108,7 @@ async def meal_init():
     await meal_commands.add_meal(
         meal_id=5,
         meal_name="Каре ягненка",
-        meal_price=0,
+        meal_price=200,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -127,7 +127,7 @@ async def meal_init():
     await meal_commands.add_meal(
         meal_id=6,
         meal_name="Черная икра",
-        meal_price=0,
+        meal_price=1000,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,
@@ -146,7 +146,7 @@ async def meal_init():
     await meal_commands.add_meal(
         meal_id=7,
         meal_name="Фуа-гра",
-        meal_price=0,
+        meal_price=10000,
         meal_description="Описание",
         meal_chars="Описание через format строки с выгрузкой эффектов",
         max_health_time=0,

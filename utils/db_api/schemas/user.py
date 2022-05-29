@@ -53,20 +53,18 @@ class User(TimedBaseModel):
     money = Column(BigInteger, default=100)
     strength = Column(Integer, default=1)
     agility = Column(Integer, default=1)
-    level = Column(Integer, default=21)  # TODO: УБРАТЬ ЗДЕСЬ И У ОРУДИЯ С ОДЕЖДОЙ
+    level = Column(Integer, default=1)
     exp = Column(Integer, default=0)
     level_up = Column(Integer, default=0)
     weapon_id = Column(
         Integer,
         ForeignKey('weapons.weapon_id', ondelete='SET NULL'),
-        nullable=True  # ,
-        # default=1
+        nullable=True
     )
     outfit_id = Column(
         Integer,
         ForeignKey('outfits.outfit_id', ondelete='SET NULL'),
-        nullable=True  # ,
-        # default=1
+        nullable=True
     )
 
     query: sql.Select

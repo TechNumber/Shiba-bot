@@ -32,7 +32,7 @@ async def weapon_init():
     await weapon_commands.add_weapon(
         weapon_id=1,
         weapon_name="Палка",
-        weapon_price=0,
+        weapon_price=10,
         weapon_description="Описание", #TODO: описание оружия
         weapon_chars="Описание через format строки с выгрузкой эффектов",
         damage=30,
@@ -44,7 +44,7 @@ async def weapon_init():
     await weapon_commands.add_weapon(
         weapon_id=2,
         weapon_name="Ржавый меч",
-        weapon_price=0,
+        weapon_price=70,
         weapon_description="Описание",
         weapon_chars="Описание через format строки с выгрузкой эффектов",
         damage=50,
@@ -56,7 +56,7 @@ async def weapon_init():
     await weapon_commands.add_weapon(
         weapon_id=3,
         weapon_name="Дубина переговоров",
-        weapon_price=0,
+        weapon_price=150,
         weapon_description="Описание",
         weapon_chars="Описание через format строки с выгрузкой эффектов",
         damage=100,
@@ -68,7 +68,7 @@ async def weapon_init():
     await weapon_commands.add_weapon(
         weapon_id=4,
         weapon_name="Костяной зуб",
-        weapon_price=0,
+        weapon_price=200,
         weapon_description="Описание",
         weapon_chars="Описание через format строки с выгрузкой эффектов",
         damage=1000,
@@ -80,7 +80,7 @@ async def weapon_init():
     await weapon_commands.add_weapon(
         weapon_id=5,
         weapon_name="Вампир",
-        weapon_price=0,
+        weapon_price=500,
         weapon_description="Описание",
         weapon_chars="Описание через format строки с выгрузкой эффектов",
         damage=950,

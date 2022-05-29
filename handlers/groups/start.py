@@ -9,6 +9,7 @@ from aiogram.types import InputFile, InputMedia, InputMediaPhoto
 
 from filters import IsCalledByOwner
 from handlers.groups.help import bot_help
+from handlers.groups.update_db import shiba_rename_from_callback
 from keyboards.inline.callback_datas import choose_picture_callback, cancel_callback
 from keyboards.inline.choose_picture.choose_picture_menu import get_choose_picture_menu
 from loader import dp
@@ -86,17 +87,20 @@ async def choose_picture(call: types.CallbackQuery):
     shutil.move(pathlib.Path(__file__).parent / "../../user_pictures/unused" / picture,
                 pathlib.Path(__file__).parent / "../../user_pictures/used" / picture)
     await call.message.edit_caption("Шиба успешно выбрана!", reply_markup=None)
-    await GameState.registered.set()
+    await shiba_rename_from_callback(call)
 
 
 @dp.callback_query_handler(IsCalledByOwner(), cancel_callback.filter(cancel_type="picture"),
                            state=GameState.choosing_picture)
 async def change_picture(call: types.CallbackQuery):
-    user = await user_commands.select_user(user_id=call.from_user.id)
     picture = random.choice(os.listdir(pathlib.Path(__file__).parent / "../../user_pictures/unused"))
-    #while
-    input_media_photo = InputMediaPhoto(InputFile(path_or_bytesio=pathlib.Path(__file__).parent / "../../user_pictures/unused/" / picture))
+    input_media_photo = InputMediaPhoto(
+        InputFile(path_or_bytesio=pathlib.Path(__file__).parent / "../../user_pictures/unused/" / picture))
     await call.message.edit_media(
-        input_media_photo,
+        input_media_photo
+    )
+    await call.message.edit_caption(
+        f"Перед тем, как продолжить, выбери свою шибу. "
+        f"Выбирай тщательно: её нельзя будет сменить впоследствии!",
         reply_markup=await get_choose_picture_menu(call.from_user.id, picture)
     )
