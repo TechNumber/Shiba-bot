@@ -27,7 +27,7 @@ async def show_my_shiba_menu(message: types.Message):
         await dp.bot.send_photo(
             message.chat.id,
             InputFile(path_or_bytesio=pathlib.Path(__file__).parent / "../../user_pictures/used/" / user.pic_path),
-            f"Информация о шибе игрока {sender_link}:"
+            caption=f"Информация о шибе игрока {sender_link}:"
             f"\n\U0001F415 Имя шибы: {user.shiba_name}"
             f"\n\U0001F31F Уровень шибы: {user.level}"
             f"\n\U00002728 Очков опыта: {user.exp}"
@@ -35,7 +35,7 @@ async def show_my_shiba_menu(message: types.Message):
             f"\n\U00002764 Здоровье шибы: {user.health}/{user.max_health}"
             f"\n\U0001F4AA Сила шибы: {user.strength}"
             f"\n\U0001F977 Ловкость шибы: {user.agility}"
-            f"\n\U0001F4B4 Денег: {user.money}",
+            f"\n\U0001F4B4 Денег: {user.money}"
             f"\n\U0001F5E1 Экипированное оружие: {equipped_weapon}"
             f"\n\U0001F458 Экипированная одежда: {equipped_outfit}",
             reply_markup=await get_my_shiba_menu(user_id=message.from_user.id)

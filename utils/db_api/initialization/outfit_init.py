@@ -32,7 +32,7 @@ async def outfit_init():
     await outfit_commands.add_outfit(
         outfit_id=1,
         outfit_name="Ошейник",
-        outfit_price=0,
+        outfit_price=20,
         outfit_description="Описание",
         outfit_chars="Описание через format строки с выгрузкой эффектов",
         health_add=10,
@@ -45,7 +45,7 @@ async def outfit_init():
     await outfit_commands.add_outfit(
         outfit_id=2,
         outfit_name="Пальто",
-        outfit_price=0,
+        outfit_price=70,
         outfit_description="Описание",
         outfit_chars="Описание через format строки с выгрузкой эффектов",
         health_add=50,
@@ -58,7 +58,7 @@ async def outfit_init():
     await outfit_commands.add_outfit(
         outfit_id=3,
         outfit_name="Белые тапочки",
-        outfit_price=0,
+        outfit_price=150,
         outfit_description="Описание",
         outfit_chars="Описание через format строки с выгрузкой эффектов",
         health_add=100,
@@ -71,7 +71,7 @@ async def outfit_init():
     await outfit_commands.add_outfit(
         outfit_id=4,
         outfit_name="Деревянный нагрудник",
-        outfit_price=0,
+        outfit_price=200,
         outfit_description="Описание",
         outfit_chars="Описание через format строки с выгрузкой эффектов",
         health_add=100,
@@ -84,7 +84,7 @@ async def outfit_init():
     await outfit_commands.add_outfit(
         outfit_id=5,
         outfit_name="Металлические латы",
-        outfit_price=0,
+        outfit_price=500,
         outfit_description="Описание",
         outfit_chars="Описание через format строки с выгрузкой эффектов",
         health_add=1000,
