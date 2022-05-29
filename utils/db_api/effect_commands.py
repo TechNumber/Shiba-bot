@@ -19,11 +19,13 @@ async def heal(user: User, healing: int):
         max_hp_buffs[0] += cur_meal.max_health_add
         max_hp_buffs[1] *= cur_meal.max_health_mpy
     weapon = await select_weapon(user.weapon_id)
-    max_hp_buffs[0] += weapon.health_add
-    max_hp_buffs[1] *= weapon.health_mpy
+    if weapon is not None:
+        max_hp_buffs[0] += weapon.health_add
+        max_hp_buffs[1] *= weapon.health_mpy
     outfit = await select_outfit(user.outfit_id)
-    max_hp_buffs[0] += outfit.health_add
-    max_hp_buffs[1] *= outfit.health_mpy
+    if outfit is not None:
+        max_hp_buffs[0] += outfit.health_add
+        max_hp_buffs[1] *= outfit.health_mpy
     max_hp = user.max_health * max_hp_buffs[1] + max_hp_buffs[0]
     cur_hp = user.health
     cur_hp += healing
