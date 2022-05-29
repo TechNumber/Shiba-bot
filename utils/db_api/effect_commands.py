@@ -63,7 +63,10 @@ async def add_effect(user: User,
             strength_duration=effect.strength_duration + meal.strength_time,
             agility_duration=effect.agility_duration + meal.agility_time
         ).apply()
-    await heal(user, meal.health_add)
+    if meal.health_mpy == -1:
+        await heal(user, 999999999)
+    else:
+        await heal(user, meal.health_add)
 
 
 async def delete_effect(user_id: int, meal_id):
