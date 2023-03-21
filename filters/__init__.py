@@ -1,9 +1,15 @@
 from aiogram import Dispatcher
 
 from loader import dp
-# from .is_admin import AdminFilter
 
+# from .is_admin import AdminFilter
+from .called_by_owner import IsCalledByOwner
+from .is_player import IsPlayer
+from .is_chat import IsChat
+from .is_admin import IsAdmin
 
 if __name__ == "filters":
-    # dp.filters_factory.bind(AdminFilter)
-    pass
+    dp.filters_factory.bind(IsCalledByOwner)
+    dp.filters_factory.bind(IsPlayer)
+    dp.filters_factory.bind(IsChat)
+    dp.filters_factory.bind(IsAdmin)
